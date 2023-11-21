@@ -1,0 +1,48 @@
+$primary-dark: #1a237e;
+$primary: #283593;
+$primary-light: #5c6bc0;
+$primary-text: #ffffff;
+$secondary: #ff6f00;
+$secondary-dark: #c43e00;
+$secondary-light: #ffa040;
+$secondary-text: #ffffff;
+$white: #ffffff;
+$gray: #eeeeee;
+
+button {
+  background-color: $primary;
+  color: $white;
+  border: 1px solid $primary;
+  margin: 1rem;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  // &:hover {
+  //   background-color: $primary-dark;
+  //   border-color: $primary-dark;
+  // }
+  // &:focus {
+  //   outline: none;
+  // }
+  // &:disabled {
+  //   background-color: $gray;
+  //   border-color: $gray;
+  //   cursor: not-allowed;
+  // }
+}
+
+input {
+  border: 1px solid $gray;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 16px;
+  transition: all 0.3s ease-in-out;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}

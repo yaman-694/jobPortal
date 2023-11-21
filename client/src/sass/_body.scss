@@ -1,0 +1,30 @@
+* {
+  margin: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  font-family: 'Body', sans-serif;
+  scroll-behavior: smooth;
+  list-style: none;
+}
+
+body {
+  background-color: #fff;
+  color: #333;
+  line-height: 1.5;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+
+
+@font-face {
+  font-family: 'FastHand';
+  src: url('../assets/fonts/Fasthand-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Body';
+  src: url('../assets/fonts/Domine-VariableFont_wght.ttf') format('truetype');
+}
