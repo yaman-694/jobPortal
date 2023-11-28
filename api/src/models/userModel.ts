@@ -3,6 +3,24 @@ import bcrypt from "bcrypt";
 // import { UserDocument } from './userModel';
 
 // Define the User schema
+
+export interface User {
+    firstname: string;
+    lastname: string;
+    email: string;
+    _id: string;
+    slug?: string;
+    information?: {
+        role?: string;
+        skills?: string;
+        locality?: string;
+        country?: string;
+        city?: string;
+        resume?: {
+            file_link?: string;
+        };
+    };
+}
 export interface UserDocument extends Document {
     firstname: string;
     lastname: string;
@@ -10,6 +28,8 @@ export interface UserDocument extends Document {
     email: string;
     password: string;
 }
+
+
 
 const UserSchema = new Schema<UserDocument>(
     {

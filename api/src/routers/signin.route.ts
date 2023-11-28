@@ -1,18 +1,30 @@
 import { Router, Request, Response } from "express";
 import { passport } from "../passport/passport";
+import { User, UserDocument } from "../models/userModel";
+import { getCandidate } from "../helper/getCandidate";
 const router = Router();
 
-router.post("/signin", passport.authenticate("local"), (req, res) => {
-    // If authentication is successful, send a success response to the frontend
+router.post("/signin", passport.authenticate("local"), async (req: Request, res: Response) => {
+    let user = req.user as User;
+    if(user.slug) {
+        const candidate = await getCandidate(user.slug);
+        (user as User).information = {
+            role: candidate.position,
+            skills: candidate.skill,
+            city: candidate.city,
+            country: candidate.country,
+            locality: candidate.locality,
+            resume: {
+                file_link: candidate?.resume?.file_link,
+            },
+        };
+    }
     res.json({ success: true, user: req.user });
 })
 
 // logout route
-
-// Add this route to your existing routes
-router.get("/logout", (req, res) => {
+router.get("/logout", (req: Request, res: Response) => {
     req.logout(err => {
-        // Pass the done callback function
         if (err) {
             res.status(500).json({ message: err });
         } else {

@@ -1,9 +1,10 @@
 export interface UserInformation {
   role: string
+  city: string
+  country: string
   skills: string
-  experience: string
-  contract: string
-  location: string
-  education: string
-  resume: File | null
+  locality: string
+  resume?: {
+    file_link: string
+  }
 }

@@ -1,8 +1,9 @@
+import bodyParser from "body-parser";
+import MongoStore from "connect-mongo";
 import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 import flash from "express-flash";
-import bodyParser from "body-parser";
 import session from "express-session";
 import http from "http";
 import mongoose from "mongoose";
@@ -26,14 +27,13 @@ mongoose.connect(MONGO_URL, { retryWrites: true, w: "majority" }).then(() => {
 // to caught uncaught exception
 process.on("uncaughtException", err => {
     console.log("UNCAUGHT EXCEPTION! 💥 Shutting down...");
-    console.log(err.name, err.message);
+    console.log(err);
     process.exit(1);
 });
 // unhandled promise rejection
 process.on("unhandledRejection", err => {
     throw err;
 });
-
 
 // app.use((req, res, next) => {
 //     res.header("Access-Control-Allow-Origin", "http://localhost:5173"); // Replace with your React app's origin
@@ -48,14 +48,17 @@ process.on("unhandledRejection", err => {
 // });
 
 const serverConfig = () => {
-    
     app.use(
         session({
             secret: "test is tought ug sdfsdf",
             resave: true,
             saveUninitialized: true,
+            store: MongoStore.create({
+                mongoUrl:
+                    "mongodb+srv://admin:ogYGizfwCG7c9gw5@cluster0.lvikbnl.mongodb.net/sessionstore?retryWrites=true&w=majority",
+            }),
             cookie: {
-                maxAge: 60000,
+                maxAge: 1000 * 60 * 60 * 24 * 7,  // One week
                 httpOnly: true,
                 secure: false,
                 sameSite: "lax",

@@ -4,7 +4,7 @@ import signinHandler from "../../handlers/signin.handler";
 const createSession = async (req: Request, res: Response) => {
     try {
         const { email, password } = req.body;
-
+        
         const data = await signinHandler({
             email,
             password,

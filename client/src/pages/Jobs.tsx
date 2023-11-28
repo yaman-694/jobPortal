@@ -1,44 +1,65 @@
-import React, { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
-interface Job {
-  id: number
-  name: string
-  country: string
-}
+import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import JobCard from '../components/JobCard'
+import { useAppSelector } from '../redux/hooks'
+import { Filter, JobFilter } from '../components/Filter'
 
 export default function Jobs() {
+  const { currentUser } = useAppSelector(state => state.user)
   const navigate = useNavigate()
   const [jobs, setJobs] = useState([])
   const [loading, setLoading] = useState(true)
+  const [filter, setFilter] = useState<Filter>({
+    job_category: '',
+    name: '',
+    country: '',
+    job_skill: '',
+    job_type: ''
+  })
 
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    const jobCardId = e.currentTarget.closest('div[data-id]')
-    console.log(jobCardId)
-  }
   useEffect(() => {
+    const queryParams = Object.entries(filter)
+      .filter(([_, value]) => value !== '')
+      .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+      .join('&')
     const fetchJobs = async () => {
-      const res = await fetch('/api/v1/crm/jobs')
-      if (!res.ok) {
-        navigate('/login')
-        return
+      try {
+        setLoading(true)
+        let url
+        if (queryParams) {
+          url = `/api/v1/crm/jobs/search?${queryParams}`
+        } else {
+          url = `/api/v1/crm/jobs`
+        }
+        const res = await fetch(url)
+        if (!res.ok) {
+          navigate('/login')
+          return
+        }
+        const data = await res.json()
+        setJobs(data.data.jobs)
+        setLoading(false)
+      } catch (error) {
+        if (error instanceof Error) throw new Error(error.message)
       }
-      const data = await res.json()
-      setJobs(data.data)
-      setLoading(false)
     }
     fetchJobs()
-  }, [])
+  }, [filter])
+
   return (
-    <div className="jobCard__container container">
-      { loading ? <h2>Loading...</h2> :
-        jobs.map((job: Job, index) => (
-          <div className="job__card" key={index} data-id={job.id}>
-            <h2>{job.name}</h2>
-            <p>{job.country}</p>
-            <button onClick={handleClick}>apply</button>
-          </div>
-        ))
-      }
+    <div className="jobs container">
+      <JobFilter filter={filter} setFilter={setFilter} jobs={jobs}/>
+      <div className="jobs__cards">
+        {loading ? (
+          <h2>Loading...</h2>
+        ) : !jobs ? (
+          <h2>No jobs found</h2>
+        ) : (
+          (jobs.map((job: any) => (
+            <JobCard key={job.slug} job={job} userSlug={currentUser.slug} />
+          )))
+        )}
+      </div>
     </div>
   )
 }

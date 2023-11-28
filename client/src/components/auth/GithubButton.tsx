@@ -4,7 +4,9 @@ export default function GithubButton() {
   }
   return (
     <div>
-      <button onClick={handleGithubLogin}>Github</button>
+      <button className="btn github" onClick={handleGithubLogin}>
+        Github
+      </button>
     </div>
   )
 }

@@ -1,12 +1,14 @@
-import Home from './pages/Home'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import LoginIn from './pages/LoginIn'
-import Signup from './pages/SignUp'
-import Onborading from './pages/Onborading'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import HomeLayout from './layouts/HomeLayout'
 import PrivateRoute from './components/PrivateRoute'
-import Profile from './pages/Profile'
-import Jobs from './pages/Jobs'
 import Layout from './layouts/layout'
+import DashBoard from './pages/Dashboard'
+import Jobs from './pages/Jobs'
+import LoginIn from './pages/LoginIn'
+import Onborading from './pages/Onborading'
+import Profile from './pages/Profile'
+import Signup from './pages/SignUp'
+import JobStatus from './pages/JobStatus'
 export default function App() {
   return (
     <BrowserRouter>
@@ -16,7 +18,10 @@ export default function App() {
           <Route path="signup" element={<Signup />} />
           <Route path="information/:id" element={<Onborading />} />
           <Route element={<PrivateRoute />}>
-            <Route index element={<Home />} />
+            <Route path="/" element={<HomeLayout />}>
+              <Route path="dashboard" element={<DashBoard />} />
+              <Route path='jobs-status' element={<JobStatus />} />
+            </Route>
             <Route path="profile" element={<Profile />} />
             <Route path="jobs" element={<Jobs />} />
           </Route>

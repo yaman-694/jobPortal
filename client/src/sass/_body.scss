@@ -1,20 +1,23 @@
 * {
   margin: 0;
+  padding: 0;
   box-sizing: border-box;
-  text-decoration: none;
-  font-family: 'Body', sans-serif;
-  scroll-behavior: smooth;
-  list-style: none;
+
 }
 
 body {
   background-color: #fff;
   color: #333;
   line-height: 1.5;
+  position: relative;
 }
 
 html {
+  font-family: 'Roboto', sans-serif;
   font-size: 62.5%;
+  text-decoration: none;
+  scroll-behavior: smooth;
+  list-style: none;
 }
 
 

@@ -1,11 +1,11 @@
 import bcrypt from "bcrypt";
 
-import { UserModel } from "../models/userModel";
+import { UserDocument, UserModel } from "../models/userModel";
 interface UserCred {
     email: string;
     password: string;
 }
-const signinHandler = async (data: UserCred) => {
+const signinHandler = async (data: UserCred): Promise<UserDocument> => {
     try {
         // create user
         const user = await UserModel.findOne({ email: data.email });

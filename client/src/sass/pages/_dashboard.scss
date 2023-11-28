@@ -1,0 +1,38 @@
+.dashboard {
+  font-size: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 2rem;
+
+  .home__heading {
+    font-size: 4rem;
+  }
+  .job__stats {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    flex: 1;
+  }
+  .candidate__status {
+    display: flex;
+    flex-direction: column;
+    gap: 1.4rem;
+    flex: 1;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 3rem;
+    border-radius: 1rem;
+
+    .status {
+      display: flex;
+      gap: 1rem;
+      flex: 1;
+      font-size: 2rem;
+      .label:hover{
+        cursor: pointer;
+        color: #020529;
+        text-decoration: underline;
+      }
+    }
+  }
+}

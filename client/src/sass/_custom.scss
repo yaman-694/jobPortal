@@ -7,30 +7,23 @@ $secondary-dark: #c43e00;
 $secondary-light: #ffa040;
 $secondary-text: #ffffff;
 $white: #ffffff;
-$gray: #eeeeee;
+$gray: #cecece;
 
-button {
-  background-color: $primary;
+.btn {
+  background-color: #020529;
   color: $white;
   border: 1px solid $primary;
-  margin: 1rem;
   border-radius: 4px;
   padding: 8px 16px;
+  margin: 1rem 0;
   font-size: 16px;
   cursor: pointer;
+  text-transform: uppercase;
   transition: all 0.3s ease-in-out;
-  // &:hover {
-  //   background-color: $primary-dark;
-  //   border-color: $primary-dark;
-  // }
-  // &:focus {
-  //   outline: none;
-  // }
-  // &:disabled {
-  //   background-color: $gray;
-  //   border-color: $gray;
-  //   cursor: not-allowed;
-  // }
+}
+
+.heading {
+  font-size: 3rem;
 }
 
 input {
@@ -42,7 +35,9 @@ input {
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 120rem;
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 4rem;
 }
+
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700&family=Roboto:wght@300;400;500;700&family=Rubik:wght@400;500;700&display=swap');

@@ -1,0 +1,26 @@
+.home {
+  padding: 2rem;
+  font-size: 2rem;
+
+  ul {
+    list-style: none;
+    display: flex;
+    border-bottom: 2px solid rgb(207, 207, 207);
+    padding-bottom: 1rem;
+    li {
+      transition: all 1s ease-in-out;
+      flex-grow: 1;
+      .nav__home__link:link,
+      .nav__home__link:active {
+        text-decoration: none;
+        color: rgb(3, 5, 33);
+      }
+      .nav__home__link:hover,
+      .nav__home__link:visited,
+      .nav__home__link.active {
+        color: rgb(3, 5, 33);
+        border-bottom: 3px solid rgb(3, 5, 33);
+      }
+    }
+  }
+}

@@ -1,22 +1,31 @@
-import { ChangeEvent, FormEvent, useState } from 'react'
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 
-import { useParams } from 'react-router-dom'
-import { UserInformation } from '../interface'
+import { useNavigate, useParams } from 'react-router-dom'
+
+import { useAppDispatch, useAppSelector } from './../redux/hooks'
+import {
+  onBoardingFailure,
+  onBoardingStart,
+  onBoardingSuccess
+} from './../redux/user/userSlice'
+import { SignOut } from './Profile'
+// import { UserInformation } from '../interface'
 
 export default function Onboarding() {
   const { id } = useParams()
-  const [formData, setFormData] = useState<UserInformation>({
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+  const { currentUser, loading, error } = useAppSelector(state => state.user)
+  const [formData, setFormData] = useState({
     role: '',
     skills: '',
-    experience: 'junior',
-    contract: 'full',
-    location: '',
-    education: '',
-    resume: null
+    locality: '',
+    country: '',
+    city: ''
   })
-
+  const [resume, setResume] = useState<File | null>(null)
   const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: ChangeEvent<HTMLInputElement>
   ) => {
     const { name, value } = e.target
     setFormData({ ...formData, [name]: value })
@@ -24,37 +33,57 @@ export default function Onboarding() {
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      setFormData({ ...formData, resume: e.target.files[0] })
+      setResume(e.target.files[0])
     }
   }
 
   const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault()
-    const data = new FormData()
-    data.append('role', formData.role)
-    data.append('skills', formData.skills)
-    data.append('experience', formData.experience)
-    data.append('contract', formData.contract)
-    data.append('location', formData.location)
-    data.append('education', formData.education)
-    data.append('resume', formData.resume as File)
-    const response = await fetch(`/api/v1/crm/create/${id}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      },
-      body: data
-    })
-    const res = await response.json()
-    console.log(res)
+    try {
+      e.preventDefault()
+      const inputData = new FormData()
+      inputData.append('role', formData.role)
+      inputData.append('skills', formData.skills)
+      inputData.append('locality', formData.locality)
+      inputData.append('country', formData.country)
+      inputData.append('city', formData.city)
+      if (resume) {
+        inputData.append('resume', resume)
+      }
+      console.log(inputData)
+      dispatch(onBoardingStart())
+      const response = await fetch(`/api/v1/crm/create/${id}`, {
+        method: 'POST',
+        body: inputData
+      })
+      const data = await response.json()
+      if (!data.success) {
+        throw new Error(data.message)
+      }
+      dispatch(onBoardingSuccess(data.data))
+      // redirect to home page
+      navigate('/dashboard')
+    } catch (error) {
+      if (error instanceof Error) {
+        dispatch(onBoardingFailure(error.message))
+        navigate('/signin')
+      }
+    }
   }
 
+  useEffect(() => {
+    if (!currentUser?._id) {
+      navigate('/login')
+    } else if (currentUser?.slug) {
+      navigate('/dashboard')
+    }
+  })
+
   return (
-    <div className='container'>
-      <h1>OnboardingForm</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Role:
+    <div className="form__container">
+      <h1 className='heading'>Onboarding Form</h1>
+      <form onSubmit={handleSubmit} className="onboard__form">
+        <div className="input__fields">
+          <label>Role:</label>
           <input
             type="text"
             name="role"
@@ -62,10 +91,9 @@ export default function Onboarding() {
             onChange={handleChange}
             required
           />
-        </label>
-
-        <label>
-          Skills:
+        </div>
+        <div className="input__fields">
+          <label>Skills:</label>
           <input
             type="text"
             name="skills"
@@ -73,74 +101,53 @@ export default function Onboarding() {
             onChange={handleChange}
             required
           />
-        </label>
-
-        <br />
-        <label>
-          Work Experience:
-          <select
-            name="experience"
-            value={formData.experience}
-            onChange={handleChange}>
-            <option value="junior">0-1</option>
-            <option value="mid-level">1-2</option>
-            <option value="senior">3-4</option>
-          </select>
-        </label>
-
-        <br />
-
-        <label>
-          Searching Form:
-          <select
-            name="contract"
-            value={formData.contract}
-            onChange={handleChange}>
-            <option value="full">Full time</option>
-            <option value="part-time">Part time</option>
-            <option value="internship">Internship</option>
-          </select>
-        </label>
-
-        <br />
-
-        <label>
-          Location:
+        </div>
+        <div className="input__fields">
+          <label>locality:</label>
           <input
             type="text"
-            name="location"
-            value={formData.location}
+            name="locality"
+            value={formData.locality}
             onChange={handleChange}
             required
           />
-        </label>
-
-        <label>
-          Education:
+        </div>
+        <div className="input__fields">
+          <label>Country:</label>
           <input
             type="text"
-            name="education"
-            value={formData.education}
+            name="country"
+            value={formData.country}
             onChange={handleChange}
             required
           />
-        </label>
+        </div>
+        <div className="input__fields">
+          <label>City:</label>
+          <input
+            type="text"
+            name="city"
+            value={formData.city}
+            onChange={handleChange}
+            required
+          />
+        </div>
 
-        <br />
-
-        <label>
-          Resume:
+        <div className="input__fields">
+          <label>Resume:</label>
           <input
             type="file"
             name="resume"
             onChange={handleFileChange}
             accept=".pdf,.doc,.docx"
           />
-        </label>
+        </div>
+        <button className='btn' type="submit" disabled={loading}>
+          {loading ? 'Loading..' : 'submit'}
+        </button>
 
-        <br />
-
-        <button type="submit">Submit</button>
+        <SignOut />
+        {error && <p style={{ color: 'red' }}>{error}</p>}
       </form>
     </div>
   )

@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { passport } from "../passport/passport";
+import { isAuthenticate } from "../middlewares/isAuthenticate";
 
 const router = Router();
 router.get(
@@ -15,7 +16,7 @@ router.get(
     })
 );
 
-router.get("/success", (req, res) => {
+router.get("/success", isAuthenticate, (req, res) => {
     if (req.user) {
         res.status(201).json({
             success: true,

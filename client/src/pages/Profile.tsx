@@ -1,49 +1,21 @@
 import React, { useState } from 'react'
-import { useAppSelector, useAppDispatch } from '../redux/hooks'
+import { useAppDispatch, useAppSelector } from '../redux/hooks'
 import {
-  deleteUserFailure,
-  deleteUserStart,
-  deleteUserSuccess,
+  UserWithFormData,
   signOutUserFailure,
   signOutUserStart,
   signOutUserSuccess,
   updateUserFailure,
   updateUserStart,
-  updateUserSuccess,
-  User
+  updateUserSuccess
 } from '../redux/user/userSlice'
-export default function Profile() {
-  const { currentUser, loading, error } = useAppSelector(state => state.user)
+import {
+  signOut
+} from '../redux/jobs/jobsSlice'
+
+
+export const SignOut = () => {
   const dispatch = useAppDispatch()
-  const [formData, setFormData] = useState<User>(currentUser)
-  const [filePrec, setFilePrec] = useState<number>(0)
-  const [fileUrl, setFileUrl] = useState<string>()
-  const [fileError, setFileError] = useState<boolean>(false)
-  const [updateSuccess, setUpdateSuccess] = useState<boolean>(false)
-
-  const handleClick = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFile(e.target.files![0])
-  }
-  const fileRef = React.useRef<HTMLInputElement>(null)
-
-  const handleDeleteUser = async () => {
-    try {
-      dispatch(deleteUserStart())
-      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
-        method: 'DELETE'
-      })
-      const data = await res.json()
-      if (data.success === false) {
-        dispatch(deleteUserFailure(data.message))
-        return
-      }
-      dispatch(deleteUserSuccess(data))
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        dispatch(deleteUserFailure(error.message))
-      }
-    }
-  }
   const handleSignOut = async () => {
     try {
       dispatch(signOutUserStart())
@@ -51,15 +23,12 @@ export default function Profile() {
         method: 'GET'
       })
       if (response.ok) {
-        // Check if the response is a redirect
         if (response.redirected) {
-          // Get the new location from the Location header
           const newLocation = response.headers.get('Location')
           dispatch(signOutUserSuccess())
-          // Redirect to the new location
+          dispatch(signOut())
           window.location.href = newLocation || '/'
         } else {
-          // Process the response as usual (assuming it's JSON)
           const result = await response.json()
           if (result.success) {
             window.location.href = result.redirectURI || '/'
@@ -77,92 +46,203 @@ export default function Profile() {
       }
     }
   }
+  return (
+    <div className="sign__out">
+      <a onClick={handleSignOut}>Sign Out</a>
+    </div>
+  )
+}
+
+export default function Profile() {
+  const { currentUser, loading, error } = useAppSelector(state => state.user)
+  const currState = {
+    _id: currentUser?._id || '',
+    firstname: currentUser?.firstname || '',
+    lastname: currentUser?.lastname || '',
+    email: currentUser?.email || '',
+    information: {
+      role: currentUser?.information?.role || '',
+      skills: currentUser?.information?.skills || '',
+      locality: currentUser?.information?.locality || '',
+      country: currentUser?.information?.country || '',
+      city: currentUser?.information?.city || ''
+    }
+  }
+
+  const dispatch = useAppDispatch()
+  const [resume, setResume] = useState<File | null>(null)
+  const [formData, setFormData] = useState<UserWithFormData>(currState)
+  const [updateSuccess, setUpdateSuccess] = useState<boolean>(false)
+
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setFormData({ ...formData, [name]: value })
+  }
+  const handleInformationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
-      [e.target.id]: e.target.value
+      information: {
+        ...formData.information,
+        [e.target.id]: e.target.value
+      }
     })
+  }
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setResume(e.target.files[0])
+    }
   }
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     try {
+      const inputData = new FormData()
+      inputData.append('firstname', formData.firstname || '')
+      inputData.append('lastname', formData.lastname || '')
+      inputData.append('email', formData.email || '')
+      inputData.append('role', formData.information?.role || '')
+      inputData.append('skills', formData.information?.skills || '')
+      inputData.append('locality', formData.information?.locality || '')
+      inputData.append('country', formData.information?.country || '')
+      inputData.append('city', formData.information?.city || '')
+      if (resume) {
+        inputData.append('resume', resume)
+      }
       dispatch(updateUserStart())
-      const res = await fetch(`/api/user/update/${currentUser?._id}`, {
+      const res = await fetch(`/api/v1/crm/update-profile`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
+        body: inputData
       })
       const data = await res.json()
       if (data.success === false) {
         dispatch(updateUserFailure(data.message))
       } else {
-        dispatch(updateUserSuccess(data))
+        dispatch(updateUserSuccess(data.data))
         setUpdateSuccess(true)
       }
     } catch (error) {
-      console.log(error)
+      if (error instanceof Error) {
+        dispatch(updateUserFailure(error.message))
+      }
     }
   }
-
   return (
-    <div className="container">
-      <h1 className="pageHeading">Profile</h1>
-      <form onSubmit={handleSubmit} className="profileForm">
-        <input
-          type="file"
-          name="avatar"
-          id="avatar"
-          accept="image/*"
-          hidden
-          ref={fileRef}
-          onChange={handleClick}
-        />
-        <img
-          onClick={() => fileRef.current?.click()}
-          src={fileUrl || currentUser.avatar}
-          alt="profile"
-        />
-        <p>
-          {fileError ? (
-            <span>Error Uploading File</span>
-          ) : filePrec > 0 && filePrec < 100 ? (
-            <span>{`Uploading ${filePrec}%...`}</span>
-          ) : filePrec === 100 && !fileError ? (
-            <span>Uploaded</span>
-          ) : (
-            ''
-          )}
-        </p>
-        <input
-          type="text"
-          defaultValue={currentUser?.firstname}
-          onChange={handleChange}
-          placeholder="username"
-          id="username"
-        />
-        <input
-          type="email"
-          defaultValue={currentUser?.email}
-          onChange={handleChange}
-          placeholder="email"
-          id="email"
-        />
-        <input
-          type="password"
-          onChange={handleChange}
-          placeholder="password"
-          id="password"
-        />
-        <button disabled={loading}>{loading ? 'Loading...' : 'Update'}</button>
-      </form>
-      <div className="footerContainer">
-        <a onClick={handleDeleteUser}>Delete Account</a>
-        <a onClick={handleSignOut}>Sign Out</a>
+    <div>
+      <div className="profile container">
+        <h1 className="profile__heading">Your Profile</h1>
+        <form onSubmit={handleSubmit} className="profile__form">
+          <div className="information name">
+            <div>
+              <label>First Name</label>
+              <input
+                type="text"
+                defaultValue={currentUser?.firstname}
+                onChange={handleChange}
+                placeholder="firstname"
+                id="firstname"
+              />
+            </div>
+            <div>
+              <label>Last Name</label>
+              <input
+                type="text"
+                defaultValue={currentUser?.lastname}
+                onChange={handleChange}
+                placeholder="lastname"
+                id="lastname"
+              />
+            </div>
+          </div>
+
+          <div className="information">
+            <label>Email</label>
+            <input
+              type="email"
+              defaultValue={currentUser?.email}
+              onChange={handleChange}
+              placeholder="email"
+              id="email"
+            />
+          </div>
+          <div className="information">
+            <label>Role</label>
+            <input
+              type="text"
+              defaultValue={currentUser?.information?.role}
+              onChange={handleInformationChange}
+              placeholder="role"
+              id="role"
+            />
+          </div>
+          <div className="information">
+            <label>Skill</label>
+            <input
+              type="text"
+              defaultValue={currentUser?.information?.skills}
+              onChange={handleInformationChange}
+              placeholder="skills"
+              id="skills"
+            />
+          </div>
+          <div className="information">
+            <label>Country</label>
+            <input
+              type="text"
+              defaultValue={currentUser?.information?.country}
+              onChange={handleInformationChange}
+              placeholder="country"
+              id="country"
+            />
+          </div>
+          <div className="information">
+            <label>City</label>
+            <input
+              type="text"
+              defaultValue={currentUser?.information?.city}
+              onChange={handleInformationChange}
+              placeholder="city"
+              id="city"
+            />
+          </div>
+          <div className="information">
+            <label>Locality</label>
+            <input
+              type="text"
+              defaultValue={currentUser?.information?.locality}
+              onChange={handleInformationChange}
+              placeholder="locality"
+              id="locality"
+            />
+          </div>
+          <div className="information">
+            <label>Resume</label>
+            <input
+              type="file"
+              name="resume"
+              onChange={handleFileChange}
+              accept=".pdf,.doc,.docx"
+            />
+          </div>
+          <div className="preview-resume">
+            {currentUser?.information?.resume?.file_link ? (
+              <a
+                href={currentUser?.information?.resume?.file_link}
+                target="_blank"
+                rel="noreferrer">
+                Preview Resume
+              </a>
+            ): (
+              <p>No resume uploaded</p>
+            )}
+          </div>
+          <button className="profile__btn" disabled={loading}>
+            {loading ? 'Loading...' : 'Update'}
+          </button>
+        </form>
+        <SignOut />
+        {updateSuccess ? <p>Profile Updated</p> : ''}
+        {error ? <p>{error}</p> : ''}
       </div>
-      {updateSuccess ? <p>Profile Updated</p> : ''}
-      {error ? <p>{error}</p> : ''}
     </div>
   )
 }

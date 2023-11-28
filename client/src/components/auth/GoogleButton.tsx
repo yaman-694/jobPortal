@@ -4,7 +4,7 @@ export default function GoogleButton() {
   }
   return (
     <div>
-      <button onClick={handleGoogleLogin}>Google</button>
+      <button className='btn google' onClick={handleGoogleLogin}>Google</button>
     </div>
   )
 }

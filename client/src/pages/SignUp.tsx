@@ -4,7 +4,6 @@ const Signup = () => {
 
   return (
     <div className="container">
-      <h2>Sign Up</h2>
       <SignupForm />
     </div>
   )

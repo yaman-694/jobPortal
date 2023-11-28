@@ -1,6 +1,11 @@
 @use 'custom';
-
+@use 'body';
+@use 'layout';
 @use 'header';
 @use 'jobs';
-
+@use 'pages/onboard';
+@use 'pages/dashboard';
+@use 'pages/profile';
+@use 'pages/jobstatus';
+@use 'pages/auth';
 @use 'footer';

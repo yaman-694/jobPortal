@@ -1,6 +1,6 @@
 // LoginForm.tsx
 
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
 import {
@@ -9,8 +9,8 @@ import {
   signInSuccess
 } from '../../redux/user/userSlice'
 import { useAppDispatch, useAppSelector } from './../../redux/hooks'
-import GoogleButton from './GoogleButton'
 import GithubButton from './GithubButton'
+import GoogleButton from './GoogleButton'
 
 interface IFormData {
   email: string
@@ -47,46 +47,57 @@ const LoginForm: React.FC = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
       })
-      const data = await response.json()
-      console.log(data)
-      if (data.success === false) {
-        dispatch(signInFailure(data.message))
-        return
+      if(!response.ok) {
+        throw new Error('Wrong email or password')
       }
+      const data = await response.json()
       dispatch(signInSuccess(data.user))
       if (!data.user.slug) {
         navigate(`/information/${data.user._id}`)
         return
       }
-      navigate('/')
+      navigate('/dashboard')
     } catch (cerror) {
       if (cerror instanceof Error) dispatch(signInFailure(cerror.message))
     }
   }
-  
+
   useEffect(() => {
     // Make the request to fetch user information
-    fetch('http://localhost:3000/auth/google/success', {
-      method: 'GET',
-      credentials: 'include'
-    })
-      .then(response => response.json())
-      .then(data => {
-        // Update the user state in Redux store
+    const fetchUser = async () => {
+      try {
+        dispatch(signInStart())
+        const response = await fetch(
+          'http://localhost:3000/auth/google/success',
+          {
+            method: 'GET',
+            credentials: 'include'
+          }
+        )
+        const data = await response.json()
         dispatch(signInSuccess(data.user))
+        if(!data.success) {
+          navigate('/login')
+          return;
+        }
+        if (!data.user.slug) {
+          navigate(`/information/${data.user._id}`)
+          return
+        }
         navigate('/')
-      })
-      .catch(error => {
-        console.error('Error:', error)
-      })
+      } catch (error) {
+
+      }
+    }
+    fetchUser()
   }, [])
 
   return (
-    <div>
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Email:
+    <div className='form__container'>
+      <h2 className='heading'>Sign In</h2>
+      <form className='login' onSubmit={handleSubmit}>
+        <div className="input__fields">
+          <label>Email:</label>
           <input
             type="email"
             name="email"
@@ -95,10 +106,9 @@ const LoginForm: React.FC = () => {
             onChange={handleChange}
             required
           />
-        </label>
-        <br />
-        <label>
-          Password:
+        </div>
+        <div className="input__fields">
+          <label>Password:</label>
           <input
             type="password"
             name="password"
@@ -107,17 +117,18 @@ const LoginForm: React.FC = () => {
             onChange={handleChange}
             required
           />
-        </label>
-        <br />
-        {/* <button disabled={loading}>{loading ? 'Loading...' : 'Sign In'}</button> */}
-        <button className="btn">Sign In</button>
+        </div>
+        <button className='btn' disabled={loading}>{loading ? 'Loading...' : 'Sign In'}</button>
+        {/* <button className="btn">Sign In</button> */}
       </form>
       <p>
         Don't have an account? <Link to="/signup">SignUp</Link>
       </p>
-      <GoogleButton />
-      <GithubButton />
-      {/* {error && <p style={{ color: 'red' }}>{error}</p>} */}
+      <div className="outh__btn">
+        <GoogleButton />
+        <GithubButton />
+      </div>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
     </div>
   )
 }

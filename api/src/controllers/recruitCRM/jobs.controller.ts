@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
-import axios from 'axios';
+import fetch from "node-fetch";
 
-export const ListJobs = async (req: Request, res: Response) => {
+export const listJobs = async (req: Request, res: Response) => {
     try {
         const { limit, page, sort_by, sort_order } = req.query;
-        let url = `${process.env.API_URL}/v1/jobs?expand=company&expand=contact`;
+        let url = `${process.env.API_URL}/v1/jobs?expand=company`;
         if (limit) {
             url += `limit=${limit}&`;
         }
@@ -17,23 +17,94 @@ export const ListJobs = async (req: Request, res: Response) => {
         if (sort_order) {
             url += `sort_order=${sort_order}&`;
         }
-        const response = await fetch(
-            url,
-            {
-                method: "GET",
-                headers: {
-                    Authorization: `Bearer ${process.env.RECRUITCRM_API_KEY}`,
-                    "Content-Type": "multipart/form-data",
-                },
-            }
-        );
-        const data = await response.json();
+        const response = await fetch(url, {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${process.env.RECRUITCRM_API_KEY}`,
+            },
+        });
         if (!response.ok) {
             throw "Internal Server Error";
         }
+        const data = await response.json();
         res.status(201).json({
             success: true,
-            data: data.data,
+            data: {
+                jobs: data.data,
+                current_page: data.current_page,
+                from: data.from,
+                last_page: data.last_page,
+                per_page: data.per_page,
+                to: data.to,
+                path: data.path,
+                total: data.total,
+            },
+        });
+    } catch (error) {
+        res.status(400).json({
+            success: false,
+            message: error.message,
+        });
+    }
+};
+
+export const searchJobs = async (req: Request, res: Response) => {
+    try {
+        const {
+            job_category,
+            job_skill,
+            name,
+            country,
+            job_type,
+            limit,
+            page,
+            sort_by,
+            sort_order,
+            search,
+        } = req.query;
+        const queryParams = Object.entries({
+            job_category,
+            job_skill,
+            name,
+            country,
+            job_type: job_type === "fullTime" ? 2 : (job_type === "partTime" ? 1 : undefined),
+            limit,
+            page,
+            sort_by,
+            sort_order,
+            search,
+        })
+            .filter(([_, value]) => value)
+            .map(
+                ([key, value]) =>
+                    `${key}=${encodeURIComponent(value as string)}`
+            )
+            .join("&");
+
+        const url = `${process.env.API_URL}/v1/jobs/search?${queryParams}&expand=company`;
+        console.log(url);
+        const response = await fetch(url, {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${process.env.RECRUITCRM_API_KEY}`,
+            },
+        });
+        if (!response.ok) {
+            throw "Internal Server Error";
+        }
+        const data = await response.json();
+        res.status(201).json({
+            success: true,
+            data: {
+                jobs: data.data,
+                current_page: data.current_page,
+                from: data.from,
+                last_page: data.last_page,
+                per_page: data.per_page,
+                to: data.to,
+                path: data.path,
+                total: data.total,
+            },
         });
     } catch (error) {
         res.status(400).json({

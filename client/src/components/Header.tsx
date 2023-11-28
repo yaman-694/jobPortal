@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import { useAppSelector } from '../redux/hooks'
 
 export default function Header() {
@@ -6,33 +6,32 @@ export default function Header() {
   return (
     <header className="header container">
       <div className="logo">
-        <h1>Job Board</h1>
+        <h1>
+          <Link to="/dashboard">Job Portal</Link>
+        </h1>
       </div>
       <nav className="header__nav">
         <ul>
           <li>
-            <Link to="/">Home</Link>
+            <NavLink to="/dashboard">Home</NavLink>
           </li>
           <li>
-            <Link to="/about">About</Link>
+            <NavLink to="/jobs">Jobs</NavLink>
           </li>
-          <li>
-            <Link to="/jobs">Jobs</Link>
-          </li>
-          {!currentUser.firstname && (
+          {!currentUser?.firstname && (
             <li>
-              <Link to="/signup">Signup</Link>
+              <NavLink to="/signup">Signup</NavLink>
             </li>
           )}
-            {currentUser.firstname ? (
-              <Link to="/profile">
-                <li>Hi {currentUser.firstname}</li>
-              </Link>
-            ) : (
-              <Link to="/profile">
-                <li>Sign In</li>
-              </Link>
-            )}
+          {currentUser?.firstname ? (
+            <li>
+              <NavLink to="/profile">Hi {currentUser?.firstname}</NavLink>
+            </li>
+          ) : (
+            <li>
+              <NavLink to="/profile">Sign In</NavLink>
+            </li>
+          )}
         </ul>
       </nav>
     </header>

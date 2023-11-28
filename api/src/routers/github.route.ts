@@ -4,7 +4,7 @@ import { passport } from "../passport/passport";
 const router = Router();
 router.get(
     "/",
-    passport.authenticate("github", { scope: ["profile", "email"] })
+    passport.authenticate("github", { scope: ["user:email"] })
 );
 
 router.get(
