@@ -65,18 +65,18 @@ passport.use(
             clientID: process.env.GITHUB_CLIENT_ID,
             clientSecret: process.env.GITHUB_CLIENT_SECRET,
             callbackURL: "/auth/github/callback",
+            scope: ["user:email"]
         },
         async (accessToken, refreshToken, profile, done) => {
-            const firstname = profile.username+profile.id;
-            const lastname = profile.username;
+            console.log(profile);
             let user = await UserModel.findOne({
-                firstname,
+                email: profile.emails?.[0].value,
             });
             if (!user) {
                 const userObj = {
-                    firstname,
-                    lastname,
-                    email: 'default@gmail.com',
+                    firstname: profile.displayName.split(" ")[0],
+                    lastname: profile.displayName.split(" ")[1],
+                    email: profile.emails?.[0].value,
                     password: Math.random().toString(36).slice(-8),
                 };
                 user = await UserModel.create(userObj);

@@ -51,6 +51,7 @@ const UserSchema = new Schema<UserDocument>(
             type: String,
             required: [true, "Please provide a email"],
             trim: true,
+            unique: true
         },
         password: {
             type: String,
