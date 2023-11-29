@@ -8,6 +8,8 @@ export interface User {
     firstname: string;
     lastname: string;
     slug?: string;
+    githubId?: string;
+    googleId?: string;
 }
 
 // extends User

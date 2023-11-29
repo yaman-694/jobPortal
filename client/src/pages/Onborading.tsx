@@ -64,6 +64,7 @@ export default function Onboarding() {
       navigate('/dashboard')
     } catch (error) {
       if (error instanceof Error) {
+        console.log(error.message)
         dispatch(onBoardingFailure(error.message))
         navigate('/signin')
       }

@@ -51,6 +51,7 @@ passport.use(
                     firstname: profile.displayName.split(" ")[0],
                     lastname: profile.displayName.split(" ")[1],
                     email: profile.emails?.[0].value,
+                    googleId: profile.id,
                     password: Math.random().toString(36).slice(-8),
                 };
                 user = await UserModel.create(userObj);
@@ -68,7 +69,6 @@ passport.use(
             scope: ["user:email"]
         },
         async (accessToken, refreshToken, profile, done) => {
-            console.log(profile);
             let user = await UserModel.findOne({
                 email: profile.emails?.[0].value,
             });
@@ -77,6 +77,7 @@ passport.use(
                     firstname: profile.displayName.split(" ")[0],
                     lastname: profile.displayName.split(" ")[1],
                     email: profile.emails?.[0].value,
+                    githubId: profile.id,
                     password: Math.random().toString(36).slice(-8),
                 };
                 user = await UserModel.create(userObj);
@@ -95,6 +96,8 @@ passport.deserializeUser(async (id, done) => {
         firstname: userDb?.firstname,
         lastname: userDb?.lastname,
         email: userDb?.email,
+        googleId: userDb?.googleId,
+        githubId: userDb?.githubId,
         slug: userDb?.slug,
     };
 

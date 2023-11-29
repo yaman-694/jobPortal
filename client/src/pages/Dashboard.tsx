@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../redux/hooks'
 import { setAppliedJobs } from '../redux/jobs/jobsSlice'
+import Loader from '../components/ui/Loader'
 
 interface IJobStatus {
   applied: any[]
@@ -54,7 +55,7 @@ export default function Home() {
         <div className="job__stats">
           <div className="candidate__status">
             {loading ? (
-              <h2>Loading...</h2>
+              <Loader />
             ) : (
               Object.entries(jobStatus).map(([key, value], index) => {
                 return (

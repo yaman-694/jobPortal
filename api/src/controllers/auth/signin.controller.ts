@@ -1,19 +1,39 @@
 import { Request, Response } from "express";
-import signinHandler from "../../handlers/signin.handler";
+import { getCandidate } from "../../helper/getCandidate";
+import { User } from "../../models/userModel";
 
-const createSession = async (req: Request, res: Response) => {
-    try {
-        const { email, password } = req.body;
-        
-        const data = await signinHandler({
-            email,
-            password,
-        });
-
-        return res.status(200).json({ message: "Logged In", data });
-    } catch (error) {
-        console.log(error);
+const signinController = async (req: Request, res: Response) => {
+    let user = req.user as User;
+    if (user.slug) {
+        const candidate = await getCandidate(user.slug);
+        (user as User).information = {
+            role: candidate.position,
+            skills: candidate.skill,
+            city: candidate.city,
+            country: candidate.country,
+            locality: candidate.locality,
+            resume: {
+                file_link: candidate?.resume?.file_link,
+            },
+        };
     }
+    res.json({ success: true, user: req.user });
 };
 
-export default createSession;
+const logoutUser = (req: Request, res: Response) => {
+    req.logout(err => {
+        if (err) {
+            res.status(500).json({ message: err });
+        } else {
+            req.session.destroy(err => {
+                if (err) {
+                    res.status(500).json({ message: err });
+                } else {
+                    res.redirect("/login");
+                }
+            });
+        }
+    });
+};
+
+export { logoutUser, signinController };

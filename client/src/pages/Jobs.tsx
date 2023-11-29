@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import JobCard from '../components/JobCard'
-import { useAppSelector } from '../redux/hooks'
 import { Filter, JobFilter } from '../components/Filter'
+import JobCard from '../components/JobCard'
+import ErrorMessage from '../components/ui/ErrorMessage'
+import Loader from '../components/ui/Loader'
+import { useAppSelector } from '../redux/hooks'
 
 export default function Jobs() {
   const { currentUser } = useAppSelector(state => state.user)
@@ -48,16 +50,16 @@ export default function Jobs() {
 
   return (
     <div className="jobs container">
-      <JobFilter filter={filter} setFilter={setFilter} jobs={jobs}/>
+      <JobFilter filter={filter} setFilter={setFilter} jobs={jobs} />
       <div className="jobs__cards">
         {loading ? (
-          <h2>Loading...</h2>
+          <Loader />
         ) : !jobs ? (
-          <h2>No jobs found</h2>
+          <ErrorMessage message="No jobs found" />
         ) : (
-          (jobs.map((job: any) => (
+          jobs.map((job: any) => (
             <JobCard key={job.slug} job={job} userSlug={currentUser.slug} />
-          )))
+          ))
         )}
       </div>
     </div>

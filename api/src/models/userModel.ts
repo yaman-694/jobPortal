@@ -1,8 +1,5 @@
 import mongoose, { Document, Schema } from "mongoose";
 import bcrypt from "bcrypt";
-// import { UserDocument } from './userModel';
-
-// Define the User schema
 
 export interface User {
     firstname: string;
@@ -10,6 +7,8 @@ export interface User {
     email: string;
     _id: string;
     slug?: string;
+    googleId?: string;
+    githubId?: string;
     information?: {
         role?: string;
         skills?: string;
@@ -26,6 +25,8 @@ export interface UserDocument extends Document {
     lastname: string;
     slug?: string;
     email: string;
+    googleId?: string;
+    githubId?: string;
     password: string;
 }
 
@@ -58,6 +59,14 @@ const UserSchema = new Schema<UserDocument>(
             required: [true, "Please provide a password"],
             trim: true,
         },
+        googleId: {
+            type: String,
+            trim: true,
+        },
+        githubId: {
+            type: String,
+            trim: true,
+        }
     },
     { timestamps: true }
 );

@@ -2,11 +2,20 @@
 
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+
+import {
+  signInFailure,
+  signInStart,
+  signInSuccess
+} from '../../redux/user/userSlice'
+import ErrorMessage from '../ui/ErrorMessage'
+import { useAppDispatch } from './../../redux/hooks'
 import GithubButton from './GithubButton'
 import GoogleButton from './GoogleButton'
 
 const SignupForm: React.FC = () => {
   const navigate = useNavigate()
+  const dispatch = useAppDispatch()
   const [firstname, setFirstname] = useState('')
   const [error, setError] = useState('')
   const [lastname, setLastname] = useState('')
@@ -18,6 +27,14 @@ const SignupForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     try {
       e.preventDefault()
+      if (!firstname || !lastname || !email || !password || !cpassword) {
+        throw new Error('Please fill in all fields')
+      }
+      if (password !== cpassword) {
+        throw new Error('Passwords do not match')
+      }
+
+      dispatch(signInStart())
       const data = await fetch('/api/v1/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -31,10 +48,13 @@ const SignupForm: React.FC = () => {
       })
       if (!data.ok) {
         const error = await data.json()
+        dispatch(signInFailure(error.message))
         throw new Error(error.message)
-        return
       }
-      navigate(`/login`)
+      const user = await data.json()
+      dispatch(signInSuccess(user.data))
+
+      navigate(`/information/${user.data._id}`)
     } catch (err) {
       if (err instanceof Error) setError(err.message)
     }
@@ -111,7 +131,7 @@ const SignupForm: React.FC = () => {
         </div>
       </div>
 
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {error && <ErrorMessage message={error} />}
     </div>
   )
 }

@@ -12,6 +12,13 @@ import { isAuthenticate } from "./src/middlewares/isAuthenticate";
 import { trackRequest } from "./src/middlewares/trackRequest";
 import { passport } from "./src/passport/passport";
 import { ROUTER } from "./src/routes";
+import { User } from "./src/models/userModel";
+
+declare module "express-session" {
+    interface SessionData {
+        passport: {user: string};
+    }
+}
 
 dotenv.config();
 

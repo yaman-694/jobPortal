@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useAppSelector } from '../redux/hooks'
+import Loader from '../components/ui/Loader'
 export default function JobStatus() {
   const { currentUser } = useAppSelector(state => state.user)
   const [jobs, setJobs] = useState([])
@@ -20,7 +21,7 @@ export default function JobStatus() {
       <div className="container job__status">
         <h1 className="home__heading">Job Status</h1>
         {loading ? (
-          <h2>Loading...</h2>
+          <Loader />
         ) : (
           <div className="job__stats">
             <div className="total__application">
