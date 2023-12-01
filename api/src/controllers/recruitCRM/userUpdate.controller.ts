@@ -48,7 +48,7 @@ export const userUpdateController = async (req: Request, res: Response) => {
                     country: country || updatedDetails.country,
                     locality: locality || updatedDetails.locality,
                     resume: {
-                        file_link: updatedDetails.resume.file_link,
+                        file_link: updatedDetails.resume?.file_link,
                     },
                 },
             },

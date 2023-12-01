@@ -47,7 +47,7 @@ const LoginForm: React.FC = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
       })
-      if(!response.ok) {
+      if (!response.ok) {
         throw new Error('Wrong email or password')
       }
       const data = await response.json()
@@ -76,39 +76,35 @@ const LoginForm: React.FC = () => {
         )
         const data = await response.json()
         dispatch(signInSuccess(data.user))
-        if(!data.success) {
+        if (!data.success) {
           navigate('/login')
-          return;
+          return
         }
         if (!data.user.slug) {
           navigate(`/information/${data.user._id}`)
           return
         }
         navigate('/')
-      } catch (error) {
-
-      }
+      } catch (error) {}
     }
     fetchUser()
   }, [])
 
   return (
-    <div className='form__container'>
-      <h2 className='heading'>Sign In</h2>
-      <form className='login' onSubmit={handleSubmit}>
+    <div className="form__container">
+      <h2 className="heading">Sign In</h2>
+      <form className="login" onSubmit={handleSubmit}>
         <div className="input__fields">
-          <label>Email:</label>
           <input
             type="email"
             name="email"
             id="email"
-            placeholder="email"
+            placeholder="Email"
             onChange={handleChange}
             required
           />
         </div>
         <div className="input__fields">
-          <label>Password:</label>
           <input
             type="password"
             name="password"
@@ -118,7 +114,9 @@ const LoginForm: React.FC = () => {
             required
           />
         </div>
-        <button className='btn' disabled={loading}>{loading ? 'Loading...' : 'Sign In'}</button>
+        <button className="btn" disabled={loading}>
+          {loading ? 'Loading...' : 'Sign In'}
+        </button>
         {/* <button className="btn">Sign In</button> */}
       </form>
       <p>

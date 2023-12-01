@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../redux/hooks'
+import { signOut } from '../redux/jobs/jobsSlice'
 import {
   UserWithFormData,
   signOutUserFailure,
@@ -9,10 +10,6 @@ import {
   updateUserStart,
   updateUserSuccess
 } from '../redux/user/userSlice'
-import {
-  signOut
-} from '../redux/jobs/jobsSlice'
-
 
 export const SignOut = () => {
   const dispatch = useAppDispatch()
@@ -74,7 +71,6 @@ export default function Profile() {
   const [formData, setFormData] = useState<UserWithFormData>(currState)
   const [updateSuccess, setUpdateSuccess] = useState<boolean>(false)
 
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setFormData({ ...formData, [name]: value })
@@ -131,97 +127,113 @@ export default function Profile() {
       <div className="profile container">
         <h1 className="profile__heading">Your Profile</h1>
         <form onSubmit={handleSubmit} className="profile__form">
-          <div className="information name">
-            <div>
-              <label>First Name</label>
-              <input
-                type="text"
-                defaultValue={currentUser?.firstname}
-                onChange={handleChange}
-                placeholder="firstname"
-                id="firstname"
-              />
+          <div className="profile__form--container">
+            <h3 className="form__heading">Profile</h3>
+            <div className="profile__form--update">
+              <div className="information">
+                <label>First Name</label>
+                <input
+                  className="input__fields"
+                  type="text"
+                  defaultValue={currentUser?.firstname}
+                  onChange={handleChange}
+                  placeholder="firstname"
+                  id="firstname"
+                />
+              </div>
+              <div className="information">
+                <label>Last Name</label>
+                <input
+                  className="input__fields"
+                  type="text"
+                  defaultValue={currentUser?.lastname}
+                  onChange={handleChange}
+                  placeholder="lastname"
+                  id="lastname"
+                />
+              </div>
+              <div className="information">
+                <label>Email</label>
+                <input
+                  className="input__fields"
+                  type="email"
+                  defaultValue={currentUser?.email}
+                  onChange={handleChange}
+                  placeholder="email"
+                  id="email"
+                />
+              </div>
             </div>
-            <div>
-              <label>Last Name</label>
-              <input
-                type="text"
-                defaultValue={currentUser?.lastname}
-                onChange={handleChange}
-                placeholder="lastname"
-                id="lastname"
-              />
+          </div>
+          <div className="profile__form--container">
+            <h3 className="form__heading">Information</h3>
+            <div className="profile__form--update">
+              <div className="information">
+                <label>Role</label>
+                <input
+                  className="input__fields"
+                  type="text"
+                  defaultValue={currentUser?.information?.role}
+                  onChange={handleInformationChange}
+                  placeholder="role"
+                  id="role"
+                />
+              </div>
+              <div className="information">
+                <label>Skill</label>
+                <input
+                  className="input__fields"
+                  type="text"
+                  defaultValue={currentUser?.information?.skills}
+                  onChange={handleInformationChange}
+                  placeholder="skills"
+                  id="skills"
+                />
+              </div>
+              <div className="information">
+                <label>Country</label>
+                <input
+                  className="input__fields"
+                  type="text"
+                  defaultValue={currentUser?.information?.country}
+                  onChange={handleInformationChange}
+                  placeholder="country"
+                  id="country"
+                />
+              </div>
+              <div className="information">
+                <label>City</label>
+                <input
+                  className="input__fields"
+                  type="text"
+                  defaultValue={currentUser?.information?.city}
+                  onChange={handleInformationChange}
+                  placeholder="city"
+                  id="city"
+                />
+              </div>
+              <div className="information">
+                <label>Locality</label>
+                <input
+                  className="input__fields"
+                  type="text"
+                  defaultValue={currentUser?.information?.locality}
+                  onChange={handleInformationChange}
+                  placeholder="locality"
+                  id="locality"
+                />
+              </div>
+              <div className="information">
+                <label>Resume</label>
+                <input
+                  className="input__fields"
+                  type="file"
+                  name="resume"
+                  onChange={handleFileChange}
+                  accept=".pdf,.doc,.docx"
+                />
+              </div>
             </div>
-          </div>
-
-          <div className="information">
-            <label>Email</label>
-            <input
-              type="email"
-              defaultValue={currentUser?.email}
-              onChange={handleChange}
-              placeholder="email"
-              id="email"
-            />
-          </div>
-          <div className="information">
-            <label>Role</label>
-            <input
-              type="text"
-              defaultValue={currentUser?.information?.role}
-              onChange={handleInformationChange}
-              placeholder="role"
-              id="role"
-            />
-          </div>
-          <div className="information">
-            <label>Skill</label>
-            <input
-              type="text"
-              defaultValue={currentUser?.information?.skills}
-              onChange={handleInformationChange}
-              placeholder="skills"
-              id="skills"
-            />
-          </div>
-          <div className="information">
-            <label>Country</label>
-            <input
-              type="text"
-              defaultValue={currentUser?.information?.country}
-              onChange={handleInformationChange}
-              placeholder="country"
-              id="country"
-            />
-          </div>
-          <div className="information">
-            <label>City</label>
-            <input
-              type="text"
-              defaultValue={currentUser?.information?.city}
-              onChange={handleInformationChange}
-              placeholder="city"
-              id="city"
-            />
-          </div>
-          <div className="information">
-            <label>Locality</label>
-            <input
-              type="text"
-              defaultValue={currentUser?.information?.locality}
-              onChange={handleInformationChange}
-              placeholder="locality"
-              id="locality"
-            />
-          </div>
-          <div className="information">
-            <label>Resume</label>
-            <input
-              type="file"
-              name="resume"
-              onChange={handleFileChange}
-              accept=".pdf,.doc,.docx"
-            />
           </div>
           <div className="preview-resume">
             {currentUser?.information?.resume?.file_link ? (
@@ -231,7 +243,7 @@ export default function Profile() {
                 rel="noreferrer">
                 Preview Resume
               </a>
-            ): (
+            ) : (
               <p>No resume uploaded</p>
             )}
           </div>

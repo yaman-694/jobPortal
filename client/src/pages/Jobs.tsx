@@ -4,10 +4,13 @@ import { Filter, JobFilter } from '../components/Filter'
 import JobCard from '../components/JobCard'
 import ErrorMessage from '../components/ui/ErrorMessage'
 import Loader from '../components/ui/Loader'
-import { useAppSelector } from '../redux/hooks'
+import { useAppDispatch ,useAppSelector } from '../redux/hooks'
+import { resetApplyToJob } from '../redux/jobs/jobsSlice'
 
 export default function Jobs() {
+  const dispatch = useAppDispatch();
   const { currentUser } = useAppSelector(state => state.user)
+  const { appliedJobs, error } = useAppSelector(state => state.jobs)
   const navigate = useNavigate()
   const [jobs, setJobs] = useState([])
   const [loading, setLoading] = useState(true)
@@ -27,6 +30,7 @@ export default function Jobs() {
     const fetchJobs = async () => {
       try {
         setLoading(true)
+        dispatch(resetApplyToJob())
         let url
         if (queryParams) {
           url = `/api/v1/crm/jobs/search?${queryParams}`
@@ -46,11 +50,18 @@ export default function Jobs() {
       }
     }
     fetchJobs()
+
+    return ()=>{
+      dispatch(resetApplyToJob())
+    }
   }, [filter])
 
   return (
     <div className="jobs container">
       <JobFilter filter={filter} setFilter={setFilter} jobs={jobs} />
+      {
+        error && <ErrorMessage message={error} />
+      }
       <div className="jobs__cards">
         {loading ? (
           <Loader />
@@ -58,7 +69,12 @@ export default function Jobs() {
           <ErrorMessage message="No jobs found" />
         ) : (
           jobs.map((job: any) => (
-            <JobCard key={job.slug} job={job} userSlug={currentUser.slug} />
+            <JobCard
+              appliedJobs={appliedJobs}
+              key={job.slug}
+              job={job}
+              userSlug={currentUser.slug}
+            />
           ))
         )}
       </div>

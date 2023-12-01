@@ -33,7 +33,6 @@ export const userHistoryController = async (req: Request, res: Response) => {
         });
 
         const currentJobStatus = Array.from(jobStates.values());
-        console.log(currentJobStatus);
         const assignedJobs = currentJobStatus.filter(
             (job: any) => job.candidate_status === "Assigned"
         );
@@ -55,6 +54,9 @@ export const userHistoryController = async (req: Request, res: Response) => {
         const offered = currentJobStatus.filter(
             (job: any) => job.candidate_status === "Offered"
         );
+        const rejected = currentJobStatus.filter(
+            (job: any) => job.candidate_status === "Rejected"
+        );
         res.status(200).json({
             success: true,
             data: {
@@ -66,6 +68,7 @@ export const userHistoryController = async (req: Request, res: Response) => {
                 interview_Rescheduled: interviewRescheduled,
                 on_Hold: onHold,
                 offered: offered,
+                rejected: rejected,
             }
         });
     } catch (error) {

@@ -34,6 +34,10 @@ const jobSlice = createSlice({
       state.appliedJobs = []
       state.loading = false
     },
+    resetApplyToJob(state) {
+      state.loading = false
+      state.error = null
+    },
     removeAppliedJob(state, action: PayloadAction<string>) {
       state.appliedJobs = state.appliedJobs.filter(job => job !== action.payload)
     }
@@ -46,7 +50,8 @@ export const {
   applyToJobFailure,
   removeAppliedJob,
   signOut,
-  setAppliedJobs
+  setAppliedJobs,
+  resetApplyToJob
 } = jobSlice.actions
 
 export default jobSlice.reducer

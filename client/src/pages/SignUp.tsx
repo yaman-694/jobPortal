@@ -3,7 +3,7 @@ const Signup = () => {
   // State variables for form fields
 
   return (
-    <div className="container">
+    <div className="container auth">
       <SignupForm />
     </div>
   )

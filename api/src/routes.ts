@@ -5,6 +5,7 @@ import jobsRouteR from './routers/jobs.route'
 import userUpdateR from './routers/userUpdate.route'
 import googleRoute from './routers/google.route'
 import githubRoute from './routers/github.route'
+import hiringPipelineR from './routers/hiringPipeLine.route'
 
 
 const apiversion = "/api/v1/";
@@ -28,6 +29,10 @@ export const ROUTER = [
     {
         path: `${apiversion}crm/update-profile`,
         router: userUpdateR,
+    },
+    {
+        path: `${apiversion}crm/hiring-pipelines`,
+        router: hiringPipelineR
     },
     {
         path: "/auth/google",

@@ -5,10 +5,14 @@
 }
 
 body {
-  background-color: #fff;
-  color: #333;
+  background-color: #ffffff;
+  color: #2d3748;
   line-height: 1.5;
   position: relative;
+  .error {
+    position: absolute;
+    top: 2rem;
+  }
 }
 
 html {

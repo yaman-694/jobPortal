@@ -7,7 +7,7 @@ const LoginIn: React.FC = () => {
   // Function to handle login logic
 
   return (
-    <div className='container'>
+    <div className='container auth'>
       <LoginForm />
     </div>
   )

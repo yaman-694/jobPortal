@@ -62,10 +62,10 @@ const serverConfig = () => {
             saveUninitialized: true,
             store: MongoStore.create({
                 mongoUrl:
-                    "mongodb+srv://admin:ogYGizfwCG7c9gw5@cluster0.lvikbnl.mongodb.net/sessionstore?retryWrites=true&w=majority",
+                    "mongodb+srv://admin:ogYGizfwCG7c9gw5@cluster0.lvikbnl.mongodb.net/clientPortal?retryWrites=true&w=majority",
             }),
             cookie: {
-                maxAge: 1000 * 60 * 60 * 24 * 7,  // One week
+                maxAge: 1000 * 60 * 60 * 24 * 7, // One week
                 httpOnly: true,
                 secure: false,
                 sameSite: "lax",

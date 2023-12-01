@@ -12,7 +12,6 @@ $gray: #cecece;
 .btn {
   background-color: #020529;
   color: $white;
-  border: 1px solid $primary;
   border-radius: 4px;
   padding: 8px 16px;
   margin: 1rem 0;
@@ -22,12 +21,20 @@ $gray: #cecece;
   transition: all 0.3s ease-in-out;
 }
 
+.loader{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
 .heading {
   font-size: 3rem;
+  margin-bottom: 2rem;
 }
 
 input {
-  border: 1px solid $gray;
+  border: 2px solid #e2e8f0;
   border-radius: 4px;
   padding: 8px 16px;
   font-size: 16px;

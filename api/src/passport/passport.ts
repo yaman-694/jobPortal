@@ -23,6 +23,8 @@ passport.use(
                     firstname: userDb.firstname,
                     lastname: userDb.lastname,
                     email: userDb.email,
+                    googleId: userDb.googleId,
+                    githubId: userDb.githubId,
                     slug: userDb.slug,
                 };
                 return done(null, user);

@@ -12,7 +12,7 @@ const loaderCss: React.CSSProperties = {
 
 export default function Loader() {
   return (
-    <div style={loaderCss}>
+    <div className='loader' style={loaderCss}>
       <img src={loader} alt="" />
     </div>
   )

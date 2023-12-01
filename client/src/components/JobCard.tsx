@@ -1,6 +1,10 @@
 import { Link } from 'react-router-dom'
-import {useAppDispatch, useAppSelector } from '../redux/hooks'
-import { applyToJobFailure, applyToJobStart, applyToJobSuccess, removeAppliedJob } from '../redux/jobs/jobsSlice'
+import { useAppDispatch } from '../redux/hooks'
+import {
+  applyToJobFailure,
+  applyToJobStart,
+  applyToJobSuccess,
+} from '../redux/jobs/jobsSlice'
 
 export interface Job {
   id: number
@@ -19,25 +23,20 @@ export interface Job {
 }
 
 interface JobCardProps {
-  job: Job,
+  job: Job
   userSlug: string | undefined
+  appliedJobs: string[]
 }
 
-const JobCard: React.FC<JobCardProps> = ({ job, userSlug }) => {
+const JobCard: React.FC<JobCardProps> = ({ job, userSlug, appliedJobs }) => {
   const dispatch = useAppDispatch()
-  const { appliedJobs, loading, error } = useAppSelector(state => state.jobs)
-
   const applyToJob = async (jobId: string | null | undefined) => {
     try {
       if (!jobId || !userSlug) return
-
       dispatch(applyToJobStart())
-      const res = await fetch(
-        `/api/v1/crm/jobs/apply/${jobId}/${userSlug}`,
-        {
-          method: 'POST'
-        }
-      )
+      const res = await fetch(`/api/v1/crm/jobs/apply/${jobId}/${userSlug}`, {
+        method: 'POST'
+      })
       if (!res.ok) {
         throw new Error('Job not applied')
       }
@@ -45,11 +44,9 @@ const JobCard: React.FC<JobCardProps> = ({ job, userSlug }) => {
       dispatch(applyToJobSuccess(jobId))
       return data
     } catch (error) {
-      console.log(error)
       if (error instanceof Error) throw new Error(error.message)
     }
   }
-
   const handleClick = async (e: React.MouseEvent<HTMLDivElement>) => {
     try {
       e.preventDefault()
@@ -58,14 +55,11 @@ const JobCard: React.FC<JobCardProps> = ({ job, userSlug }) => {
       const applyButton = (e.target as Element).closest('.apply__button')
       if (applyButton) {
         if (appliedJobs.includes(jobId as string)) {
-          applyButton.textContent = 'Apply Now'
-          applyButton.classList.remove('applied')
-          dispatch(removeAppliedJob(jobId as string))
-          return
+          throw new Error('Already applied')
         }
+        applyButton.textContent = 'Applied'
         const data = await applyToJob(jobId)
         if (data) {
-          applyButton.textContent = 'Applied'
           applyButton.classList.add('applied')
         }
       } else if (jobDescription) {
@@ -77,6 +71,7 @@ const JobCard: React.FC<JobCardProps> = ({ job, userSlug }) => {
       }
     }
   }
+
   return (
     <div className="job__card" data-id={job.slug} onClick={handleClick}>
       <div className="job__header">
@@ -101,9 +96,7 @@ const JobCard: React.FC<JobCardProps> = ({ job, userSlug }) => {
       />
       <div className="apply__button">
         <Link className="apply__button" to=".">
-          {
-            appliedJobs.includes(job.slug) ? 'Applied' : 'Apply Now'
-          }
+          {appliedJobs.includes(job.slug) ? 'Applied' : 'Apply Now'}
         </Link>
       </div>
     </div>

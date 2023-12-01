@@ -64,59 +64,56 @@ const SignupForm: React.FC = () => {
     <div className="form__container">
       <h2 className="heading">Sign Up</h2>
       <form className="signup" onSubmit={handleSubmit}>
-        <div className="name">
-          <div className="input__fields">
-            <label>First Name:</label>
-            <input
-              type="text"
-              id="firstname"
-              value={firstname}
-              onChange={e => setFirstname(e.target.value)}
-              required
-            />
-          </div>
-          <div className="input__fields">
-            <label>Last Name:</label>
-            <input
-              type="text"
-              id="lastname"
-              value={lastname}
-              onChange={e => setLastname(e.target.value)}
-              required
-            />
-          </div>
+        <div className="input__fields">
+          <input
+            type="text"
+            placeholder="First Name"
+            id="firstname"
+            value={firstname}
+            onChange={e => setFirstname(e.target.value)}
+            required
+          />
         </div>
         <div className="input__fields">
-          <label>Email:</label>
+          <input
+            type="text"
+            id="lastname"
+            placeholder="Last Name"
+            value={lastname}
+            onChange={e => setLastname(e.target.value)}
+            required
+          />
+        </div>
+        <div className="input__fields">
           <input
             type="email"
             id="email"
+            placeholder="Email"
             value={email}
             onChange={e => setEmail(e.target.value)}
             required
           />
         </div>
         <div className="input__fields">
-          <label>Password:</label>
           <input
             type="password"
             id="password"
+            placeholder="Password"
             value={password}
             onChange={e => setPassword(e.target.value)}
             required
           />
         </div>
         <div className="input__fields">
-          <label>Confirm Password:</label>
           <input
             type="password"
             id="confirmPassword"
+            placeholder="Confirm Password"
             value={cpassword}
             onChange={e => setCpassword(e.target.value)}
             required
           />
         </div>
-        <br />
         <button className="btn" type="submit">
           Sign Up
         </button>

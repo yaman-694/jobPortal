@@ -1,8 +1,10 @@
+import { PieChart } from '@mui/x-charts'
 import { useEffect, useState } from 'react'
 import { useAppSelector } from '../redux/hooks'
 
+import { HomeHeader } from '../components/HomeHeader'
 import Loader from '../components/ui/Loader'
-import StatusTag from '../components/ui/StatuTag'
+import StatusTag from '../components/ui/StatusTag'
 
 interface IJobStatusCardProps {
   jobs: any[]
@@ -16,7 +18,6 @@ const rejectedCategories = [
   'Did Not Join',
   'Interview Not Attended'
 ]
-
 
 const JobStatusCardCategory: React.FC<IJobStatusCardProps> = ({
   jobs,
@@ -93,6 +94,7 @@ export default function JobStatus() {
   const { currentUser } = useAppSelector(state => state.user)
   const [jobs, setJobs] = useState([])
   const [loading, setLoading] = useState(true)
+  const [data, setData] = useState<any>([])
   useEffect(() => {
     setLoading(true)
     fetch(`/api/v1/crm/jobs/history/${currentUser?.slug}`)
@@ -106,29 +108,74 @@ export default function JobStatus() {
       })
   }, [])
 
-  // useEffect(() => {
-  //   const findPipeLine = async () => {
-  //     jobs.forEach(async (job: any) => {
-  //       const response = await fetch(
-  //         `/api/v1/crm/hiring-pipelines/${job.job.hiring_pipeline_id}`
-  //       )
-  //       const data = await response.json()
-  //       if (!data.success) {
-  //         return
-  //       }
-  //       const pipelines = data.data
-  //       console.log(pipelines)
-  //     })
-  //   }
-  //   if (jobs.length) {
-  //     findPipeLine()
-  //   }
-  // }, [jobs])
+  useEffect(() => {
+    const GraphData = [
+      {
+        id: 1,
+        label: 'Applied',
+        value: jobs.filter(
+          (job: any) =>
+            job.candidate_status === 'Applied' ||
+            job.candidate_status === 'Assigned'
+        ).length
+      },
+      {
+        id: 2,
+        label: 'In Progress',
+        value: jobs.filter(
+          (job: any) =>
+            job.candidate_status === 'Interview Scheduled' ||
+            job.candidate_status === 'Interview Not Attended' ||
+            job.candidate_status === 'Interview Rescheduled' ||
+            job.candidate_status === 'On Hold'
+        ).length
+      },
+      {
+        id: 3,
+        label: 'Offered',
+        value: jobs.filter(
+          (job: any) =>
+            job.candidate_status === 'Offered' ||
+            job.candidate_status === 'Selected' ||
+            job.candidate_status === 'Placed'
+        ).length
+      },
+      {
+        id: 4,
+        label: 'Rejected',
+        value: jobs.filter(
+          (job: any) =>
+            job.candidate_status === 'Rejected' ||
+            job.candidate_status === 'Did Not Join'
+        ).length
+      }
+    ]
+    setData(GraphData)
+  }, [jobs])
 
   return (
     <div>
       <div className="container job__status">
-        <h1 className="home__heading">Job Status</h1>
+        <HomeHeader currentUser={currentUser} loading={loading}>
+              <PieChart
+                colors={['#8b5cf6', '#ec4899', '#f97316', '#ef4444']}
+                series={[
+                  {
+                    data,
+                    innerRadius: 80,
+                    outerRadius: 100,
+                    paddingAngle: 2,
+                    cornerRadius: 5,
+                    startAngle: 0,
+                    endAngle: 360,
+                    cx: 156,
+                    cy: 150
+                  }
+                ]}
+                width={500}
+                height={300}
+              />
+        </HomeHeader>
         {loading ? <Loader /> : <JobStatusCard jobs={jobs} />}
       </div>
     </div>

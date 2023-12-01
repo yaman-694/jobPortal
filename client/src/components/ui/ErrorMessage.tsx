@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react'
 
 interface ErrorMessageProps {
-  message: string;
+  message: string
 }
 
 const styleError: React.CSSProperties = {
@@ -12,13 +12,25 @@ const styleError: React.CSSProperties = {
   borderRadius: '5px',
   border: '1px solid #dc2626',
   margin: '1rem 0',
-  textAlign: 'center' as const // Specify 'center' as a const value
+  textAlign: 'center' as const
 }
 
 export default function ErrorMessage({ message }: ErrorMessageProps) {
-  return (
-    <div>
+  const [isVisible, setIsVisible] = useState(true)
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsVisible(false)
+    }, 3000)
+
+    return () => {
+      clearTimeout(timer)
+    }
+  }, [])
+
+  return isVisible ? (
+    <div className="error">
       <p style={styleError}>{message}</p>
     </div>
-  );
+  ) : null
 }
