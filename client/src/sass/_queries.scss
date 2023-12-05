@@ -1,0 +1,61 @@
+@media (min-width: 576px) {
+}
+@media (max-width: 576px) {
+  .form__container {
+    .input__fields {
+      input {
+        width: 100%;
+      }
+    }
+  }
+
+  .auth__container {
+    height: 100%;
+  }
+  .filter__btn {
+    display: block;
+  }
+
+  .jobs.open {
+    .jobs__filter {
+      display: none;
+    }
+  }
+  .jobs__filter {
+    position: static;
+  }
+
+  .filter__active__item {
+    
+  }
+
+  .auth__img {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  html {
+    font-size: 50%;
+  }
+  .total__application {
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
+    .application__status {
+      align-items: center;
+      border: none !important;
+
+      padding: 0 6rem;
+    }
+  }
+}
+
+@media (max-width: 992px) {
+}
+
+@media (max-width: 1200px) {
+}
+
+@media (max-width: 1400px) {
+}

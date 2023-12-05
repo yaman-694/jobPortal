@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom"
-import { UserWithFormData } from "../redux/user/userSlice"
+import { Link } from 'react-router-dom'
+import { UserWithFormData } from '../redux/user/userSlice'
 
 export const UserInformation: React.FC<{ currentUser: UserWithFormData }> = ({
   currentUser
@@ -7,7 +7,7 @@ export const UserInformation: React.FC<{ currentUser: UserWithFormData }> = ({
   return (
     <div className="home__heading">
       <h1>Hi, {currentUser?.firstname.toUpperCase()}!</h1>
-      <p>Monitor You Job application</p>
+      <p>Monitor your job applications</p>
       <div className="user__details">
         <p>
           <span>Role - </span>
@@ -21,17 +21,19 @@ export const UserInformation: React.FC<{ currentUser: UserWithFormData }> = ({
           <span>Country - </span>
           {currentUser?.information.country}
         </p>
-        {currentUser?.information.resume?.file_link && (
-          <button>
-            <a
+        <div className="button__container">
+          {currentUser?.information.resume?.file_link && (
+            <a className='download__resume'
               target="_blank"
               rel="noreferrer"
               href={currentUser?.information.resume?.file_link}>
-              Download Resume
+              Resume
             </a>
-          </button>
-        )}
-        <Link to="/profile">Edit Profile</Link>
+          )}
+          <Link className="edit__profile" to="/profile">
+            Edit Profile
+          </Link>
+        </div>
       </div>
     </div>
   )

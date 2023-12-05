@@ -13,24 +13,30 @@
   }
   .candidate__status {
     display: flex;
-    background-color: #fafafa;
     flex-direction: column;
     gap: 1.4rem;
     flex: 1;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     padding: 3rem;
-    border-radius: 1rem;
-
-    .status {
-      display: flex;
-      gap: 1rem;
-      flex: 1;
-      font-size: 2rem;
-      .label:hover {
-        cursor: pointer;
-        color: #020529;
-        text-decoration: underline;
-      }
-    }
+    border-radius: 12px;
   }
+}
+
+.list__dashboard {
+  display: grid;
+  grid-template-columns: 0.3fr 1fr 1fr 0.2fr;
+  border-bottom: 1px solid #e2e8f0;
+  color: #475569;
+  align-items: end;
+
+  div {
+    padding: 1rem 0;
+  }
+}
+
+.list__heading {
+  font-weight: 500;
+  border: none;
+  margin-bottom: 1rem;
+  color: #4b5563;
 }

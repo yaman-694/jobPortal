@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import filterSvg from '../assets/svg/filter.svg'
 import { Filter, JobFilter } from '../components/Filter'
 import JobCard from '../components/JobCard'
 import ErrorMessage from '../components/ui/ErrorMessage'
 import Loader from '../components/ui/Loader'
-import { useAppDispatch ,useAppSelector } from '../redux/hooks'
+import { Svg } from '../components/ui/Svg'
+import { useAppDispatch, useAppSelector } from '../redux/hooks'
 import { resetApplyToJob } from '../redux/jobs/jobsSlice'
 
 export default function Jobs() {
-  const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch()
   const { currentUser } = useAppSelector(state => state.user)
   const { appliedJobs, error } = useAppSelector(state => state.jobs)
   const navigate = useNavigate()
@@ -51,17 +53,29 @@ export default function Jobs() {
     }
     fetchJobs()
 
-    return ()=>{
+    return () => {
       dispatch(resetApplyToJob())
     }
   }, [filter])
+  const handleClick = () => {
+    const filterContainer = document.querySelector('.jobs')
+    if (filterContainer) {
+      filterContainer.classList.toggle('open')
+    }
+  }
 
   return (
-    <div className="jobs container">
+    <div className="jobs container open">
+      <div className="filter__btn--container">
+        <button className="filter__btn" onClick={handleClick}>
+          <span>
+            Filters
+            <Svg path={filterSvg} width="18px" height="18px" />
+          </span>
+        </button>
+      </div>
       <JobFilter filter={filter} setFilter={setFilter} jobs={jobs} />
-      {
-        error && <ErrorMessage message={error} />
-      }
+      {error && <ErrorMessage message={error} />}
       <div className="jobs__cards">
         {loading ? (
           <Loader />

@@ -16,7 +16,9 @@ const StatusTag: React.FC<StatusTagProps> = ({ status }) => {
       fontWeight: 500,
       letterSpacing: '1px',
       margin: '1rem 0',
-      cursor: 'pointer'
+      cursor: 'pointer',
+      textAlign: 'center',
+      flexGrow: 0
     }
 
     switch (status.toLowerCase()) {
@@ -24,7 +26,13 @@ const StatusTag: React.FC<StatusTagProps> = ({ status }) => {
         return {
           ...commonStyle,
           backgroundColor: '#87CEEB',
-          color: '#000080'
+          color: '#3730a3'
+        }
+      case 'interview scheduled':
+        return {
+          ...commonStyle,
+          backgroundColor: '#bef264',
+          color: '#3f6212'
         }
       case 'assigned':
         return {

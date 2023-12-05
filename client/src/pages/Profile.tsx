@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../redux/hooks'
 import { signOut } from '../redux/jobs/jobsSlice'
 import {
@@ -44,10 +45,16 @@ export const SignOut = () => {
     }
   }
   return (
-    <div className="sign__out">
-      <a onClick={handleSignOut}>Sign Out</a>
+    <div>
+      <a className="sign__out" onClick={handleSignOut}>
+        Sign Out
+      </a>
     </div>
   )
+}
+
+const capitalizeFirst = (str: string) => {
+  return str.charAt(0).toUpperCase() + str.slice(1)
 }
 
 export default function Profile() {
@@ -123,13 +130,23 @@ export default function Profile() {
     }
   }
   return (
-    <div>
+    <div className="profile__section">
       <div className="profile container">
-        <h1 className="profile__heading">Your Profile</h1>
         <form onSubmit={handleSubmit} className="profile__form">
+          {/* username */}
           <div className="profile__form--container">
-            <h3 className="form__heading">Profile</h3>
+            <h3 className="profile__subheading">My Profile</h3>
             <div className="profile__form--update">
+              <div className="information">
+                <label>Preferred Name</label>
+                <p className="preferred__name">
+                  {capitalizeFirst(currentUser.firstname) +
+                    ' ' +
+                    capitalizeFirst(currentUser.lastname)}
+                </p>
+              </div>
+
+              {/* <div className="name"> */}
               <div className="information">
                 <label>First Name</label>
                 <input
@@ -152,8 +169,19 @@ export default function Profile() {
                   id="lastname"
                 />
               </div>
+            </div>
+            {/* </div> */}
+          </div>
+
+          {/* account security */}
+          <div className="profile__form--container">
+            <h3 className="profile__subheading">Account Security </h3>
+            <div className="profile__form--update">
               <div className="information">
-                <label>Email</label>
+                <div>
+                  <label>Email</label>
+                  <p>Set a email to connect recruiter</p>
+                </div>
                 <input
                   className="input__fields"
                   type="email"
@@ -163,10 +191,21 @@ export default function Profile() {
                   id="email"
                 />
               </div>
+              <div className="information password">
+                <div>
+                  <label>Password</label>
+                  <p>Set a strong password to login to your account</p>
+                </div>
+                <div className="password__button">
+                  <Link to="change-password">Change Password</Link>
+                </div>
+              </div>
             </div>
           </div>
+
+          {/* User Information */}
           <div className="profile__form--container">
-            <h3 className="form__heading">Information</h3>
+            <h3 className="profile__subheading">Information</h3>
             <div className="profile__form--update">
               <div className="information">
                 <label>Role</label>
@@ -223,7 +262,7 @@ export default function Profile() {
                   id="locality"
                 />
               </div>
-              <div className="information">
+              <div className="information input__file--container">
                 <label>Resume</label>
                 <input
                   className="input__fields"
@@ -244,14 +283,35 @@ export default function Profile() {
                 Preview Resume
               </a>
             ) : (
-              <p>No resume uploaded</p>
+              <p
+                style={{
+                  color: '#f43f5e',
+                  fontWeight: 'bold',
+                  fontSize: '1.6rem'
+                }}>
+                No resume uploaded
+              </p>
             )}
           </div>
+
           <button className="profile__btn" disabled={loading}>
             {loading ? 'Loading...' : 'Update'}
           </button>
+
+          {/* Danger */}
+          <div className="profile__form--container">
+            <h3 className="profile__subheading">Account</h3>
+            <div className="profile__form--update">
+              <div className="information">
+                <div>
+                  <label>Sign Out</label>
+                  <p>Sign out to clear user session on this browser</p>
+                </div>
+                <SignOut />
+              </div>
+            </div>
+          </div>
         </form>
-        <SignOut />
         {updateSuccess ? <p>Profile Updated</p> : ''}
         {error ? <p>{error}</p> : ''}
       </div>

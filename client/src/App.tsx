@@ -9,6 +9,7 @@ import Onborading from './pages/Onborading'
 import Profile from './pages/Profile'
 import Signup from './pages/SignUp'
 import JobStatus from './pages/JobStatus'
+import ChangePassword from './pages/ChangePassword'
 export default function App() {
   return (
     <BrowserRouter>
@@ -20,10 +21,11 @@ export default function App() {
           <Route element={<PrivateRoute />}>
             <Route path="/" element={<HomeLayout />}>
               <Route path="dashboard" element={<DashBoard />} />
-              <Route path='jobs-status' element={<JobStatus />} />
+              <Route path="jobs-status" element={<JobStatus />} />
             </Route>
             <Route path="profile" element={<Profile />} />
             <Route path="jobs" element={<Jobs />} />
+            <Route path="profile/change-password" element={<ChangePassword />} />
           </Route>
           <Route path="*" element={<h1>Not Found</h1>} />
         </Route>

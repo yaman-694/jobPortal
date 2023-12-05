@@ -84,7 +84,7 @@ const LoginForm: React.FC = () => {
           navigate(`/information/${data.user._id}`)
           return
         }
-        navigate('/')
+        navigate('/dashboard')
       } catch (error) {}
     }
     fetchUser()

@@ -24,9 +24,7 @@ export default function Onboarding() {
     city: ''
   })
   const [resume, setResume] = useState<File | null>(null)
-  const handleChange = (
-    e: ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setFormData({ ...formData, [name]: value })
   }
@@ -80,70 +78,82 @@ export default function Onboarding() {
   })
 
   return (
-    <div className="form__container">
-      <h1 className='heading'>Onboarding Form</h1>
-      <form onSubmit={handleSubmit} className="onboard__form">
-        <div className="input__fields">
-          <label>Role:</label>
-          <input
-            type="text"
-            name="role"
-            value={formData.role}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="input__fields">
-          <label>Skills:</label>
-          <input
-            type="text"
-            name="skills"
-            value={formData.skills}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="input__fields">
-          <label>locality:</label>
-          <input
-            type="text"
-            name="locality"
-            value={formData.locality}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="input__fields">
-          <label>Country:</label>
-          <input
-            type="text"
-            name="country"
-            value={formData.country}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="input__fields">
-          <label>City:</label>
-          <input
-            type="text"
-            name="city"
-            value={formData.city}
-            onChange={handleChange}
-            required
-          />
+    <div className="container">
+      <form onSubmit={handleSubmit} className="profile__form">
+        <div className="profile__form--container">
+          <h3 className="profile__subheading">
+            Please fill the following details
+          </h3>
+          <div className="profile__form--update">
+            <div className="information">
+              <label>Role</label>
+              <input
+                type="text"
+                placeholder="Role"
+                name="role"
+                value={formData.role}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="information">
+              <label>Skill</label>
+              <input
+                type="text"
+                placeholder="Skills"
+                name="skills"
+                value={formData.skills}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="information">
+              <label>Locality</label>
+              <input
+                type="text"
+                placeholder="Locality"
+                name="locality"
+                value={formData.locality}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="information">
+              <label>Country</label>
+              <input
+                type="text"
+                name="country"
+                placeholder="Country"
+                value={formData.country}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="information">
+              <label>City</label>
+              <input
+                type="text"
+                name="city"
+                placeholder="City"
+                value={formData.city}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="information">
+              <label>Resume:</label>
+              <input
+                type="file"
+                name="resume"
+                onChange={handleFileChange}
+                accept=".pdf,.doc,.docx"
+              />
+            </div>
+          </div>
         </div>
 
-        <div className="input__fields">
-          <label>Resume:</label>
-          <input
-            type="file"
-            name="resume"
-            onChange={handleFileChange}
-            accept=".pdf,.doc,.docx"
-          />
-        </div>
-        <button className='btn' type="submit" disabled={loading}>
+        <button className="profile__btn" type="submit" disabled={loading}>
           {loading ? 'Loading..' : 'submit'}
         </button>
 

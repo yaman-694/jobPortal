@@ -1,7 +1,7 @@
-import { PieChart } from '@mui/x-charts/PieChart'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { HomeHeader } from '../components/HomeHeader'
+import ListDashBoard from '../components/ui/ListDashboard'
 import Loader from '../components/ui/Loader'
 import { useAppDispatch, useAppSelector } from '../redux/hooks'
 import { setAppliedJobs } from '../redux/jobs/jobsSlice'
@@ -16,6 +16,7 @@ interface IJobStatus {
   'On Hold': any[]
   Offered: any[]
   Rejected: any[]
+  all: any[]
 }
 
 export default function Home() {
@@ -33,7 +34,8 @@ export default function Home() {
     'Interview Rescheduled': [],
     'On Hold': [],
     Offered: [],
-    Rejected: []
+    Rejected: [],
+    all: []
   })
   useEffect(() => {
     const getData = async () => {
@@ -57,73 +59,54 @@ export default function Home() {
 
   useEffect(() => {
     const GraphData = Object.entries(jobStatus).map(([key, value], index) => {
+      if (key === 'all') return
       const label = Array.from(key.split('_'))
         .map(word => {
           return word[0].toUpperCase() + word.slice(1) + ' '
         })
         .join('')
+
       return {
         id: index,
         label,
         value: value.length
       }
     })
-    console.log(GraphData)
     setData(GraphData)
   }, [jobStatus])
 
   return (
     <div>
       <div className="dashboard__container dashboard container">
-        <HomeHeader currentUser={currentUser} loading={loading}>
-          <PieChart
-            colors={[
-              '#67e8f9',
-              '#60a5fa',
-              '#86efac',
-              '#8b5cf6',
-              '#ec4899',
-              '#f97316',
-              '#f59e0b',
-              '#10b981',
-              '#3b82f6',
-              '#ef4444'
-            ]}
-            series={[
-              {
-                data,
-                innerRadius: 20,
-                outerRadius: 100,
-                paddingAngle: 2,
-                cornerRadius: 5,
-                startAngle: 0,
-                endAngle: 360,
-                cx: 156,
-                cy: 150
-              }
-            ]}
-            width={500}
-            height={300}
-          />
-        </HomeHeader>
+        <HomeHeader currentUser={currentUser} />
         <div className="job__stats">
           <div className="candidate__status">
-            {loading ? (
-              <Loader />
-            ) : (
-              Object.entries(jobStatus).map(([key, value], index) => {
-                return (
-                  <div key={index} className="status">
-                    <div className="label">
-                      {Array.from(key.split('_')).map(word => {
-                        return word[0].toUpperCase() + word.slice(1) + ' '
-                      })}
-                    </div>
-                    <span className="count">{'- ' + value.length}</span>
-                  </div>
-                )
-              })
-            )}
+            <h3>Recent Activity</h3>
+            <li className="list__dashboard list__heading">
+              <div>Sno.</div>
+              <div className="job__name--list">Job Name</div>
+              <div className="company__name--list">Company</div>
+              <div>Status</div>
+            </li>
+            {loading && <Loader />}
+            {!loading &&
+              (jobStatus.all.length > 0 ? (
+                jobStatus.all
+                  .slice(0, 6)
+                  .map((job: any, id) => {
+                    return (
+                      <ListDashBoard
+                        key={id}
+                        id={id}
+                        jobName={job.job_name}
+                        jobStatus={job.candidate_status}
+                        company={job.company_name}
+                      />
+                    )
+                  })
+              ) : (
+                <p>No Recent Activity</p>
+              ))}
           </div>
         </div>
       </div>

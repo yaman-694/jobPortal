@@ -9,6 +9,8 @@ $secondary-text: #ffffff;
 $white: #ffffff;
 $gray: #eeeeee;
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora&family=Poppins:wght@400;500&display=swap');
+
 .jobs {
   padding-top: 2rem;
   padding-bottom: 4.8rem;
@@ -17,7 +19,6 @@ $gray: #eeeeee;
   align-items: flex-start;
   flex-wrap: wrap;
   font-size: 1.8rem;
-  position: relative;
   &__filter {
     max-width: 30rem;
     position: sticky;
@@ -27,8 +28,8 @@ $gray: #eeeeee;
     gap: 2rem;
     padding: 3rem;
     background-color: $white;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
     margin-bottom: 20px;
     overflow: hidden;
     transition: all 0.3s ease-in-out;
@@ -39,18 +40,18 @@ $gray: #eeeeee;
       flex-wrap: wrap;
       text-transform: lowercase;
       .filter__active__item {
-        gap: 1rem;
+        display: flex;
+        align-items: start;
         background-color: #eeeeee;
         font-size: 1.2rem;
         padding: 0.5rem 1rem;
         border-radius: 100vh;
-        display: inline-block;
-        cursor: pointer;
         border: 1px solid #c0c0c0;
-        .filter__btn {
+        .filter__btnx {
+          cursor: pointer;
           background-color: transparent;
           border: none;
-          font-size: 1.6rem;
+          font-size: 1.8rem;
           margin-left: 1rem;
         }
       }
@@ -100,14 +101,27 @@ $gray: #eeeeee;
 
 /* JobCard.css */
 .job__card {
-  border: 1px solid #ddd;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+border: 1px solid #ddd;
+  padding: 2rem 2.5rem 2rem;
+  border-radius: 12px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
   border: 2px solid #fafafa;
+  transition: all 0.3s ease-in-out;
+}
+
+.job__card:hover {
+  border: 2px solid #3498db;
 }
 
 .job__header {
+  h2 {
+    font-family: Poppins, serif;
+    font-size: 2.4rem;
+  }
+  p {
+    font-family: Poppins, serif;
+    font-style: italic;
+  }
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -148,29 +162,65 @@ $gray: #eeeeee;
   }
 }
 
-.options {
-  overflow-y: scroll;
-  max-height: 200px;
-  padding: 1rem;
-  border-left: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
-  border-right: 1px solid #ddd;
-  border-bottom-left-radius: 8px;
-  border-bottom-right-radius: 8px;
-  background-color: #fff;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  display: none;
-  ul {
-    list-style: none;
-    li {
-      padding: 2px 4px;
-    }
-    li:hover {
-      background-color: #eee;
-    }
-  }
-}
+// .options {
+//   overflow-y: scroll;
+//   max-height: 200px;
+//   padding: 1rem;
+//   border-left: 1px solid #ddd;
+//   border-bottom: 1px solid #ddd;
+//   border-right: 1px solid #ddd;
+//   border-bottom-left-radius: 8px;
+//   border-bottom-right-radius: 8px;
+//   background-color: #fff;
+//   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+//   display: none;
+//   ul {
+//     list-style: none;
+//     li {
+//       padding: 2px 4px;
+//     }
+//     li:hover {
+//       background-color: #eee;
+//     }
+//   }
+// }
 
 .options.active {
   display: block;
+}
+.filter__btn--container {
+  background-color: #ffffff;
+  position: sticky;
+  width: 100%;
+  padding: 2rem 0;
+
+  top: 0;
+}
+.filter__btn {
+  z-index: 99;
+  align-self: flex-start;
+  background-color: transparent;
+  border: none;
+  top: 2rem;
+  span {
+    padding: 0.5rem 1rem;
+    font-size: 1.8rem;
+    margin-left: 1rem;
+    display: flex;
+    align-items: center;
+    flex: nowrap;
+    gap: 0.5rem;
+    border: 2px solid #1f2937;
+    color: #1f2937;
+    border-radius: 100vh;
+  }
+
+  display: none;
+}
+
+
+.filter__section {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }

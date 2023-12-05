@@ -1,56 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Alice&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;500&display=swap');
 
-.home__heading {
-  flex: 1;
-  background: #757f9a; /* fallback for old browsers */
-  background: -webkit-linear-gradient(
-    to right bottom,
-    #dbeafe,
-    #fae8ff
-  ); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(
-    to right bottom,
-    #dbeafe,
-    #fae8ff
-  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  padding: 2rem;
-  border-radius: 1rem;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  h1 {
-    font-size: 4rem;
-  }
-  p {
-    font-size: 2rem;
-  }
-  position: relative;
-  .user__details {
-    margin-top: 1rem;
-    span {
-      font-weight: 500;
-    }
-  }
-}
-
-.pie__chart {
-  width: 50%;
-  background-color: #fafafa;
-  padding: 2rem;
-  border-radius: 1rem;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
 
 .home__header {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   gap: 2rem;
-  height: 35rem;
   a:link,
   a:visited {
     font-size: 1.6rem;
-    position: absolute;
     display: inline-block;
     color: #fff;
     background-color: #020529;
-    padding: 1rem 1.8rem;
+    padding: 0.4rem 1.6rem;
     border-radius: 0.5rem;
     text-decoration: none;
     bottom: 2rem;
@@ -63,4 +25,40 @@
     color: #020529;
     text-decoration: none;
   }
+  .edit__profile {
+    right: 2rem;
+  }
+}
+
+.home__heading {
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  font-family: 'Raleway', sans-serif;
+  h1 {
+    font-family: 'Alice', serif;
+    font-size: 3rem;
+  }
+  p {
+    font-size: 1.8rem;
+  }
+  .user__details {
+    margin-top: 1rem;
+    span {
+      font-weight: 500;
+    }
+  }
+}
+
+.pie__chart {
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.button__container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2rem;
 }

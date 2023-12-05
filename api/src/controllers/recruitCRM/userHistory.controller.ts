@@ -33,6 +33,14 @@ export const userHistoryController = async (req: Request, res: Response) => {
         });
 
         const currentJobStatus = Array.from(jobStates.values());
+        // sort currentJobStatus by updated_on
+        currentJobStatus.sort((a: any, b: any) => {
+            const aDate = new Date(a.updated_on);
+            const bDate = new Date(b.updated_on);
+
+            return bDate.getTime() - aDate.getTime();
+        });
+        
         const assignedJobs = currentJobStatus.filter(
             (job: any) => job.candidate_status === "Assigned"
         );
@@ -69,6 +77,7 @@ export const userHistoryController = async (req: Request, res: Response) => {
                 on_Hold: onHold,
                 offered: offered,
                 rejected: rejected,
+                all: currentJobStatus,
             }
         });
     } catch (error) {

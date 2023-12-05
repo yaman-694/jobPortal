@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    /* Style for the container */
+    .file-input-container {
+      position: relative;
+      width: 200px;
+      overflow: hidden;
+    }
+
+    /* Style for the hidden input */
+    .file-input-container input[type="file"] {
+      position: absolute;
+      font-size: 100px;
+      opacity: 0;
+      top: 0;
+      left: 0;
+      cursor: pointer;
+    }
+
+    /* Style for the visible part of the input */
+    .file-input-container .file-input-label {
+      display: inline-block;
+      padding: 8px 16px;
+      background-color: #4CAF50;
+      color: #fff;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- File input container -->
+  <div class="file-input-container">
+    <!-- Hidden file input -->
+    <input type="file" id="fileInput" />
+    <!-- Visible label/button -->
+    <label for="fileInput" class="file-input-label">Choose File</label>
+  </div>
+
+</body>
+</html>

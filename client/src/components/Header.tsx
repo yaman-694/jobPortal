@@ -1,13 +1,19 @@
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink,useNavigate } from 'react-router-dom'
 import { useAppSelector } from '../redux/hooks'
+
+import Avatar from './ui/Avatar'
 
 export default function Header() {
   const { currentUser } = useAppSelector(state => state.user)
+  const navigate = useNavigate()
+  const handleClick = () => {
+    navigate('/profile')
+  }
   return (
     <header className="header container">
       <div className="logo">
         <h1>
-          <Link to="/dashboard">Job Portal</Link>
+          <Link to="/dashboard">Por</Link>
         </h1>
       </div>
       <nav className="header__nav">
@@ -24,12 +30,12 @@ export default function Header() {
             </li>
           )}
           {currentUser?.firstname ? (
-            <li>
-              <NavLink to="/profile">Hi {currentUser?.firstname}</NavLink>
+            <li onClick={handleClick}>
+              <Avatar name={currentUser.firstname} size={40} />
             </li>
           ) : (
             <li>
-              <NavLink to="/profile">Sign In</NavLink>
+              <NavLink to="/login">Sign In</NavLink>
             </li>
           )}
         </ul>

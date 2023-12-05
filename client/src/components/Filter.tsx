@@ -117,7 +117,7 @@ export const JobFilter: React.FC<JobFilterProps> = ({
             <span key={key} className="filter__active__item">
               <span>{value as string}</span>
               <button
-                className="filter__btn"
+                className="filter__btnx"
                 onClick={() =>
                   setFilter({
                     ...filter,

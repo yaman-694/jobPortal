@@ -67,6 +67,7 @@ export const passwordUpdateController = async (req: Request, res: Response) => {
     try {
         const userId = (req.user as User)?._id;
         const { password, newPassword } = req.body;
+        console.log(req.body);
         const user = await UserModel.findById(userId);
         if (!user) {
             throw new Error("User does not exist");
