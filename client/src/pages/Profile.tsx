@@ -297,6 +297,8 @@ export default function Profile() {
           <button className="profile__btn" disabled={loading}>
             {loading ? 'Loading...' : 'Update'}
           </button>
+          {updateSuccess ? <p>Profile Updated</p> : ''}
+          {error ? <p>{error}</p> : ''}
 
           {/* Danger */}
           <div className="profile__form--container">
@@ -312,8 +314,6 @@ export default function Profile() {
             </div>
           </div>
         </form>
-        {updateSuccess ? <p>Profile Updated</p> : ''}
-        {error ? <p>{error}</p> : ''}
       </div>
     </div>
   )

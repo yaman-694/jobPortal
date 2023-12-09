@@ -17,7 +17,6 @@ export const userHistoryController = async (req: Request, res: Response) => {
         
         data.forEach((job: any) => {
             const key = `${job.job_name}-${job.company_name}`;
-
             if (jobStates.has(key)) {
                 // replace job state with the latest date
                 const jobState = jobStates.get(key);
@@ -40,43 +39,9 @@ export const userHistoryController = async (req: Request, res: Response) => {
 
             return bDate.getTime() - aDate.getTime();
         });
-        
-        const assignedJobs = currentJobStatus.filter(
-            (job: any) => job.candidate_status === "Assigned"
-        );
-        const shortlistedJobs = currentJobStatus.filter(
-            (job: any) => job.candidate_status === "Shortlisted"
-        );
-        const interviewScheduled = currentJobStatus.filter(
-            (job: any) => job.candidate_status === "Interview Scheduled"
-        );
-        const interviewNotAttended = currentJobStatus.filter(
-            (job: any) => job.candidate_status === "Interview Not Attended"
-        );
-        const interviewRescheduled = currentJobStatus.filter(
-            (job: any) => job.candidate_status === "Interview Rescheduled"
-        );
-        const onHold = currentJobStatus.filter(
-            (job: any) => job.candidate_status === "On Hold"
-        );
-        const offered = currentJobStatus.filter(
-            (job: any) => job.candidate_status === "Offered"
-        );
-        const rejected = currentJobStatus.filter(
-            (job: any) => job.candidate_status === "Rejected"
-        );
         res.status(200).json({
             success: true,
             data: {
-                applied: currentJobStatus,
-                assigned_Jobs: assignedJobs,
-                shortlisted_Jobs: shortlistedJobs,
-                interview_Scheduled: interviewScheduled,
-                interview_Not_Attended: interviewNotAttended,
-                interview_Rescheduled: interviewRescheduled,
-                on_Hold: onHold,
-                offered: offered,
-                rejected: rejected,
                 all: currentJobStatus,
             }
         });

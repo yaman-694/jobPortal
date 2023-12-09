@@ -1,4 +1,5 @@
-import StatusTag from "../ui/StatusTag"
+import { useJobStatus } from '../../contexts/JobStatusContext'
+import StatusTag from '../ui/StatusTag'
 
 const appliedCategories = ['Applied', 'Assigned']
 const offeredCategories = ['Offered', 'Selected', 'Placed']
@@ -8,23 +9,10 @@ const rejectedCategories = [
   'Interview Not Attended'
 ]
 
-export interface IJobStatusCardProps {
-  jobs: any[]
-  category?: string
-  state?: number
-  setState?: any
-  applied?: number
-  inProgress?: number
-  offered?: number
-  setApplied?: any
-  setInProgress?: any
-  setOffered?: any
-}
-
-export const JobStatusCardCategory: React.FC<IJobStatusCardProps> = ({
-  jobs,
-  category
-}) => {
+export const JobStatusCardCategory: React.FC<{
+  category: string
+}> = ({ category }) => {
+  const { jobs } = useJobStatus()
   return (
     <div className="job__status--categories">
       {jobs.map((job: any) => {
