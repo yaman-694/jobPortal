@@ -5,7 +5,7 @@ import jobsRouteR from './routers/jobs.route'
 import userUpdateR from './routers/userUpdate.route'
 import googleRoute from './routers/google.route'
 import githubRoute from './routers/github.route'
-import hiringPipelineR from './routers/hiringPipeLine.route'
+import hiringPipelineR from './routers/hiringPipeline.route'
 
 
 const apiversion = "/api/v1/";

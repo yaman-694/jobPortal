@@ -6,7 +6,7 @@ import {
 
 
 export const JobStatusCard: React.FC = () => {
-  const { applied, inProgress, offered, jobs } = useJobStatus()
+  const { applied, inProgress, offered } = useJobStatus()
   return (
     <div className="job__stats">
       <div className="total__application">
